@@ -1,0 +1,24 @@
+{
+  "name": "winside",
+  "version": "1.0.0",
+  "description": "Turn practically any web content into native-feeling sidebars for Windows.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Spatchy/Winside.git"
+  },
+  "author": "Spatchy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Spatchy/Winside/issues"
+  },
+  "homepage": "https://github.com/Spatchy/Winside#readme",
+  "devDependencies": {
+    "electron": "^21.0.1",
+    "eslint": "^8.24.0"
+  }
+}
