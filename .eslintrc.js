@@ -27,6 +27,10 @@ module.exports = {
     "semi": [
       "error",
       "never"
+    ],
+    "max-len": [
+      "error",
+      80
     ]
   }
 }
