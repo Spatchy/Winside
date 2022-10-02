@@ -1,0 +1,36 @@
+body, html {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.mainControlContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  background-color: red;
+  width: 15px;
+  height: 100vh;
+}
+
+.closeBtn {
+  margin-bottom: 15px;
+  color: white;
+  width: 13px;
+  height: 13px;
+  border-radius: 2px;
+  font-size: xx-small;
+} 
+
+.closeBtn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
