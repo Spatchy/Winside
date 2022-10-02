@@ -1,4 +1,4 @@
-const { BrowserWindow } = require("electron")
+const { BrowserWindow, BrowserView } = require("electron")
 const path = require("path")
 
 const __ = (file) => {
@@ -41,8 +41,22 @@ const createWindow = (sidebarRelativeWidth = 3) => {
     }
   })
 
+  const webContent = new BrowserView
+
   win.loadFile(__("index.html"))
     .then(() => {
+
+      win.setBrowserView(webContent)
+      webContent.setBounds({
+        x: 10,
+        y: 0,
+        width: sideBarWidth - 10,
+        height: primaryDisplay.workAreaSize.height
+      })
+
+      // a placeholder... for now ;)
+      webContent.webContents.loadURL("https://electronjs.org")
+
       let fraction = 0.01
       const animationInterval = setInterval(() => {
         fraction = easeOutQuart(fraction)
@@ -55,7 +69,10 @@ const createWindow = (sidebarRelativeWidth = 3) => {
         if(fraction === 1) {
           clearInterval(animationInterval)
         }
-      }, 2)      
+      }, 2)
+
+
+
     })
     .catch((e) => console.error(e))
   
