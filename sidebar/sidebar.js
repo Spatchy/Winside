@@ -11,7 +11,7 @@ const relativeToActualWidth = (rel, screenWidth) => {
 
 const easeOutQuart = (x) => {
   try {
-    return 1 - Math.pow(1 - x, 2)
+    return 1 - Math.pow(1 - x, 1.15)
   } catch (error) {
     console.error(error)
   }
@@ -55,10 +55,9 @@ const createWindow = (sidebarRelativeWidth = 3) => {
         if(fraction === 1) {
           clearInterval(animationInterval)
         }
-      }, 1)
-      
+      }, 2)      
     })
-    .catch(alert("Load failed :("))
+    .catch((e) => console.error(e))
   
 }
 
