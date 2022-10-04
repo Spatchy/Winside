@@ -17,7 +17,7 @@ const easeOutQuart = (x) => {
   }
 }
 
-const createWindow = (sidebarRelativeWidth = 3) => {
+const createWindow = (winsertId, sidebarRelativeWidth = 3) => {
 
   const { screen } = require("electron")
   const primaryDisplay = screen.getPrimaryDisplay()
