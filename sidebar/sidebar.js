@@ -1,5 +1,6 @@
 const { BrowserWindow, BrowserView } = require("electron")
 const path = require("path")
+const winsertEngine = require("./winsertEngine")
 
 const __ = (file) => {
   return path.join(__dirname, file)
@@ -55,7 +56,7 @@ const createWindow = (winsertId, sidebarRelativeWidth = 3) => {
       })
 
       // a placeholder... for now ;)
-      webContent.webContents.loadURL("https://electronjs.org")
+      winsertEngine.loadWinsert(webContent, "OOBE")
 
       let fraction = 0.01
       const animationInterval = setInterval(() => {
