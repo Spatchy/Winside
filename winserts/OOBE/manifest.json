@@ -1,0 +1,12 @@
+{
+  "displayName": "First Time Setup",
+  "mainURL": "https://electronjs.org",
+  "inject": {
+    "script": [
+      "payload.js"
+    ],
+    "style": [
+      "style.css"
+    ]
+  }
+}
