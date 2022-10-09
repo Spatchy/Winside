@@ -12,6 +12,9 @@ const loadWinsert = (webContent, winsertId) => {
   )
   webContent.webContents.loadURL(manifest.mainURL).then(() => {
     webContent.webContents.openDevTools()
+    webContent.webContents.executeJavaScript(
+      `window.winsideVars = {winsertId: "${winsertId}"}`
+    )
     manifest.inject.script.forEach((file) => {
       fs.readFile(`${winsertPath}${file}`, (err, payload) => {
         const payloadStr = payload.toString()

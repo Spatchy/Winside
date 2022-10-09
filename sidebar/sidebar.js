@@ -42,7 +42,11 @@ const createWindow = (winsertId, sidebarRelativeWidth = 3) => {
     }
   })
 
-  const webContent = new BrowserView
+  const webContent = new BrowserView({
+    webPreferences: {
+      preload: __("winsertPreload.js")
+    }
+  })
 
   win.loadFile(__("index.html"))
     .then(() => {

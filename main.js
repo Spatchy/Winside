@@ -1,10 +1,9 @@
 const { app, ipcMain } = require("electron")
 const path = require("path")
 const sidebar = require("./sidebar/sidebar")
+const winsertApi = require("./winsertApi")
 
-ipcMain.on("closeSidebar", () => {
-  app.quit()
-})
+winsertApi.openIpcChannels(app, ipcMain)
 
 const instanceLock = app.requestSingleInstanceLock()
 

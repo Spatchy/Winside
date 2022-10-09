@@ -1,1 +1,1 @@
-console.log("-----Test-----")
+console.log(window.winsideVars.winsertId)
