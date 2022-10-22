@@ -31,6 +31,18 @@ module.exports = {
     "max-len": [
       "error",
       80
+    ],
+    "func-call-spacing": [
+      "error",
+      "never"
+    ],
+    "function-call-argument-newline": [
+      "error",
+      "consistent"
+    ],
+    "spaced-comment": [
+      "error",
+      "always"
     ]
   }
 }
