@@ -12,7 +12,7 @@ const init = (userData) => {
 }
 
 const check = (userData) => {
-  if (fs.existsSync(`${userData}/index.json`)) {
+  if (!fs.existsSync(`${userData}/index.json`)) {
     init(userData)
   }
 }

@@ -22,13 +22,35 @@
     </div>
     <div class="main-container">
       <div class="settings-page general is-active">
+        <h1>General</h1>
 
+        <h3>Data</h3>
+        <div>{winsertCount} Winserts installed <button>Rescan folder</button></div>
+        <button>Open data folder</button>
+        <div class="winsert-panel">Drag Winsert here to install or click to browse</div>
+        <button>Rebuild datamap</button>
+
+        <h3>Customization</h3>
+        <div>Sidebar position<button>Left</button><button>Right</button></div>
+        <div>Accent Color <button>Color Picker Placeholder</button></div>
+        <div><input type="checkbox" checked/> Allow Winserts to override accent color</div>
+
+        <h3>Developer</h3>
+        <div><input type="checkbox"/> Enable developer options</div>
+
+        <h5>Support</h5>
+        <div>Visit <a href="https://spatchy.net">spatchy.net</a></div>
       </div>
       <div class="settings-page modules">
-        
+        <h1>Winsert Settings</h1>
+        <div class="winserts-list">
+          <!--Winsert settings will be inserted-->
+        </div>
       </div>
       <div class="settings-page developer">
-        
+        <h1>Developer Options</h1>
+        <div><input type="checkbox"/> Open Chromium dev tools when sidebar is shown</div>
+        <input type="text" placeholder="Custom user agent string">
       </div>
     </div>
   </body>
