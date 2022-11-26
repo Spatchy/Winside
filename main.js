@@ -2,12 +2,20 @@ const { app, ipcMain } = require("electron")
 const path = require("path")
 const sidebar = require("./sidebar/sidebar")
 const settings = require("./settings/settings")
-const firstTimeSetup = require("./firstTimeSetup")
+const setup = require("./setup")
 const winsertApi = require("./winsertApi")
 
 
-winsertApi.openIpcChannels(app, ipcMain)
-firstTimeSetup.check(app.getPath("userData"))
+const userSettings = setup.check(app.getPath("userData"))
+
+const apiFunctionsMap = {
+  changeSetting: (setting, value) => {
+    setup.writeSetting(app.getPath("userData"), setting, value)
+  },
+  getSettings: () => userSettings
+}
+
+winsertApi.openIpcChannels(app, ipcMain, apiFunctionsMap)
 
 const checkValidWinsertUri = (winsertUri) => {
   const uuidRegexp = (
@@ -31,9 +39,9 @@ if (!instanceLock) {
     })
     if (checkValidWinsertUri(winsertUri)) {
       const winsertId = winsertUri.slice("winside://".length)
-      sidebar.createWindow(winsertId)
+      sidebar.createWindow(winsertId, userSettings)
     } else {
-      settings.createWindow(app.getPath("userData"))
+      settings.createWindow(app.getPath("userData"), userSettings)
     }
   })
 

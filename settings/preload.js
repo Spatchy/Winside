@@ -1,5 +1,11 @@
 const { contextBridge, ipcRenderer } = require("electron")
 
 contextBridge.exposeInMainWorld("WinsideSettings", {
-  closeSidebar: () => ipcRenderer.send("closeSidebar")
+  changeSetting: (setting, value) => {
+    ipcRenderer.send("changeSetting", {setting, value})
+  },
+
+  getSettings: () => {
+    return ipcRenderer.invoke("getSettings")
+  }
 })
