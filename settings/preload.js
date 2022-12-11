@@ -7,5 +7,9 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
 
   getSettings: () => {
     return ipcRenderer.invoke("getSettings")
+  },
+
+  openDataFolder: () => {
+    ipcRenderer.send("openDataFolder")
   }
 })

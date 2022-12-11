@@ -43,6 +43,12 @@ module.exports = {
     "spaced-comment": [
       "error",
       "always"
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
     ]
   }
 }

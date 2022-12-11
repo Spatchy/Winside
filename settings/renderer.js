@@ -18,41 +18,101 @@ document.addEventListener("DOMContentLoaded", () => {
       window.WinsideSettings.changeSetting(setting, value)
       settings[setting] = value
     }
-
-    // Test settings
-    console.log(settings)
-    changeSetting("showDeveloperOptions", true)
     
     const handlers = {
       // Menu:
-      menuGeneral: () => {
+      menuGeneral: (_ctrl) => {
         menuSelector("general")
       },
     
-      menuWinserts: () => {
+      menuWinserts: (_ctrl) => {
         menuSelector("winserts")
       },
       
-      menuDeveloper: () => {
+      menuDeveloper: (_ctrl) => {
         menuSelector("developer")
       },
     
       // General:
-      rescan: () => {
+      rescan: (_ctrl) => {
         console.log("rescan")
       },
     
-      dataFolder: () => {
-        console.log("dataFolder")
+      dataFolder: (_ctrl) => {
+        window.WinsideSettings.openDataFolder()
       },
     
-      rebuild: () => {
+      rebuild: (_ctrl) => {
         console.log("rebuild")
-      }
+      },
+
+      winsertPanel: (_ctrl) => {}, // TODO
+
+      setSidebarLeft: (_ctrl) => {
+        changeSetting("isDefaultSide", false)
+      },
+      
+      setSidebarRight: (_ctrl) => {
+        changeSetting("isDefaultSide", true)
+      },
+      
+      colorPicker: (_ctrl) => {}, // TODO
+
+      allowColorOverride: (ctrl) => {
+        changeSetting("allowAccentOverride", ctrl.checked)
+      },
+
+      enableDevOptions: (ctrl) => {
+        changeSetting("showDeveloperOptions", ctrl.checked)
+      },
+
+    }
+
+    const stateMap = {
+      colorPicker: (ctrl) => {
+        ctrl.style.backgroundColor = settings.accentColor
+      },
+
+      setSidebarLeft: (ctrl) => {
+        if (settings.isDefaultSide) {
+          ctrl.classList.remove("is-selected")
+        } else {
+          ctrl.classList.add("is-selected")
+        }
+      },
+
+      setSidebarRight: (ctrl) => {
+        if (settings.isDefaultSide) {
+          ctrl.classList.add("is-selected")
+        } else {
+          ctrl.classList.remove("is-selected")
+        }
+      },
+
+      allowColorOverride: (ctrl) => {
+        ctrl.checked = settings.allowAccentOverride
+      },
+
+      enableDevOptions: (ctrl) => {
+        ctrl.checked = settings.showDeveloperOptions
+        if (ctrl.checked) {
+          document.getElementById("menuDeveloper").classList.remove("is-hidden")
+        } else {
+          document.getElementById("menuDeveloper").classList.add("is-hidden")
+        }
+      },
     }
   
-    Array.from(document.getElementsByTagName("button")).forEach(btn => {
-      btn.addEventListener("click", handlers[btn.id])
+    Array.from(document.querySelectorAll("[control]")).forEach(ctrl => {
+      if(typeof handlers[ctrl.id] === "function") {
+        ctrl.addEventListener("click", () => {
+          handlers[ctrl.id](ctrl)
+          stateMap[ctrl.id] && stateMap[ctrl.id](ctrl)
+        })
+      }
+      if(typeof stateMap[ctrl.id] === "function") {
+        stateMap[ctrl.id](ctrl)
+      }
     })
 
   })

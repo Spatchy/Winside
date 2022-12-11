@@ -1,4 +1,4 @@
-const { app, ipcMain } = require("electron")
+const { app, ipcMain, shell } = require("electron")
 const path = require("path")
 const sidebar = require("./sidebar/sidebar")
 const settings = require("./settings/settings")
@@ -12,7 +12,12 @@ const apiFunctionsMap = {
   changeSetting: (setting, value) => {
     setup.writeSetting(app.getPath("userData"), setting, value)
   },
-  getSettings: () => userSettings
+
+  getSettings: () => userSettings,
+
+  openDataFolder: () => {
+    shell.showItemInFolder(app.getPath("userData"))
+  }
 }
 
 winsertApi.openIpcChannels(app, ipcMain, apiFunctionsMap)

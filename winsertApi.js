@@ -23,6 +23,8 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return apiFunctionsMap.getSettings()
   })
 
+  ipcMain.on("openDataFolder", apiFunctionsMap.openDataFolder)
+
   ipcMain.handle("requestPermission", async (_event, permissionName) => {
     // TODO: build permissions system
     if(permissionsNames.includes(permissionName)) {
