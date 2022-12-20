@@ -20,5 +20,8 @@
   "devDependencies": {
     "electron": "^21.0.1",
     "eslint": "^8.24.0"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
   }
 }

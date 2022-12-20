@@ -4,11 +4,26 @@ const permissionsNames = [
   "send-notifications"
 ]
 
-const openIpcChannels = (app, ipcMain) => {
+const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   ipcMain.on("closeSidebar", () => {
     app.quit()
   })
+
+  ipcMain.on("changeSetting", (_event, settingsMap) => {
+    const {
+      setting,
+      value
+    } = settingsMap
+
+    apiFunctionsMap.changeSetting(setting, value)
+  })
+
+  ipcMain.handle("getSettings", async () => {
+    return apiFunctionsMap.getSettings()
+  })
+
+  ipcMain.on("openDataFolder", apiFunctionsMap.openDataFolder)
 
   ipcMain.handle("requestPermission", async (_event, permissionName) => {
     // TODO: build permissions system

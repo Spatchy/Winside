@@ -1,9 +1,37 @@
-const { app, ipcMain } = require("electron")
+const { app, ipcMain, shell } = require("electron")
 const path = require("path")
 const sidebar = require("./sidebar/sidebar")
+const settings = require("./settings/settings")
+const setup = require("./setup")
 const winsertApi = require("./winsertApi")
 
-winsertApi.openIpcChannels(app, ipcMain)
+
+const userSettings = setup.check(app.getPath("userData"))
+
+const apiFunctionsMap = {
+  changeSetting: (setting, value) => {
+    setup.writeSetting(app.getPath("userData"), setting, value)
+  },
+
+  getSettings: () => userSettings,
+
+  openDataFolder: () => {
+    shell.showItemInFolder(app.getPath("userData"))
+  }
+}
+
+winsertApi.openIpcChannels(app, ipcMain, apiFunctionsMap)
+
+const checkValidWinsertUri = (winsertUri) => {
+  const uuidRegexp = (
+    /^[0-9a-f]{8}\b-[0-9a-f]{4}\b-[0-9a-f]{4}\b-[0-9a-f]{4}\b-[0-9a-f]{12}$/gi
+  )
+
+  if (winsertUri) {
+    return uuidRegexp.test(winsertUri.slice("winside://".length))
+  }
+  return false
+}
 
 const instanceLock = app.requestSingleInstanceLock()
 
@@ -11,13 +39,24 @@ if (!instanceLock) {
   app.quit()
 } else {
   app.on("second-instance", (event, commandLine) => {
-    const winsertId = commandLine.find((param) => {
+    const winsertUri = commandLine.find((param) => {
       return param.startsWith("winside://")
-    }).slice("winside://".length)
-    sidebar.createWindow(winsertId)
+    })
+    if (checkValidWinsertUri(winsertUri)) {
+      const winsertId = winsertUri.slice("winside://".length)
+      sidebar.createWindow(winsertId, userSettings)
+    } else {
+      settings.createWindow(app.getPath("userData"), userSettings)
+    }
   })
 
   app.whenReady().then(() => {
+
+    if (userSettings.showOOBE) {
+      const oobeWinsertId = userSettings.showOOBE
+      userSettings.showOOBE = true // remove ID to avoid leaking
+      sidebar.createWindow(oobeWinsertId, userSettings)
+    }
 
     console.log("winside started, listening for triggers")
 

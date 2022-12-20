@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link rel="stylesheet" href="styles.css">
+    <script src="renderer.js"></script>
+    <title>Settings</title>
+  </head>
+  <body>
+    <div class="menu">
+      <button control id="menuGeneral" class="menu-option">
+        General
+      </button>
+      <button control id="menuWinserts" class="menu-option">
+        Winserts
+      </button>
+      <button control id="menuDeveloper" class="menu-option is-hidden">
+        Developer
+      </button>
+    </div>
+    <div class="main-container">
+      <div class="settings-page general is-active">
+        <h1>General</h1>
+
+        <h3>Data</h3>
+        <div>{winsertCount} Winserts installed <button control id="rescan">Rescan folder</button></div>
+        <button control id="dataFolder">Open data folder</button>
+        <div control id="winsertPanel" class="winsert-panel">Drag Winsert here to install or click to browse</div>
+        <button control id="rebuild">Rebuild datamap</button>
+
+        <h3>Customization</h3>
+        <div>Sidebar position
+          <button control id="setSidebarLeft">Left</button>
+          <button control id="setSidebarRight">Right</button>
+        </div>
+        <div>Accent Color <button control id="colorPicker">Color Picker Placeholder</button></div>
+        <div>
+          <input control type="checkbox" id="allowColorOverride" />
+          <span>Allow Winserts to override accent color</span>
+        </div>
+
+        <h3>Developer</h3>
+        <div>
+          <input control type="checkbox" id="enableDevOptions"/>
+          <span>Enable developer options</span>
+        </div>
+
+        <h5>Support</h5>
+        <div>Visit <a href="https://spatchy.net">spatchy.net</a></div>
+      </div>
+      <div class="settings-page winserts is-hidden">
+        <h1>Winsert Settings</h1>
+        <div id="winsertsList" class="winserts-list">
+          <!--Winsert settings will be inserted-->
+        </div>
+      </div>
+      <div class="settings-page developer is-hidden">
+        <h1>Developer Options</h1>
+        <div>
+          <input control type="checkbox" id="useChromeDevtools"/>
+          <span>Open Chromium dev tools when sidebar is shown</span>
+        </div>
+        <input control type="text" id="customAgentInput" placeholder="Custom user agent string"/>
+      </div>
+    </div>
+  </body>
+</html>
