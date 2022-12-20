@@ -49,6 +49,21 @@ module.exports = {
       {
         "argsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "space-before-blocks": [
+      "error",
+      "always"
+    ],
+    "keyword-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
   }
 }

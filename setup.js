@@ -21,13 +21,19 @@ const init = (userData) => {
     })
   )
 
-  fs.cpSync("/winserts/OOBE", `${userData}/winserts/${oobeWinsertId}`)
+  fs.cpSync(
+    "./winserts/OOBE",
+    `${userData}/winserts/${oobeWinsertId}`,
+    { recursive: true }
+  )
+
+  return oobeWinsertId
 }
 
 const getOverriddenDefaults = (userData) => {
   const settingsFilepath = `${userData}/settings.json`
-  if (fs.existsSync(settingsFilepath)){
-    return {...defaults, ...JSON.parse(fs.readFileSync(settingsFilepath))}
+  if (fs.existsSync(settingsFilepath)) {
+    return { ...defaults, ...JSON.parse(fs.readFileSync(settingsFilepath)) }
   }
   return defaults
 }
@@ -44,8 +50,8 @@ const writeSetting = (userData, setting, value) => {
 
 const check = (userData) => {
   if (!fs.existsSync(`${userData}/index.json`)) {
-    init(userData)
-    return { ...defaults, showOOBE: true}
+    const oobeWinsertId = init(userData)
+    return { ...defaults, showOOBE: oobeWinsertId }
   }
   return getOverriddenDefaults(userData)
 }

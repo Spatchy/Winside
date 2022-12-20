@@ -52,6 +52,12 @@ if (!instanceLock) {
 
   app.whenReady().then(() => {
 
+    if (userSettings.showOOBE) {
+      const oobeWinsertId = userSettings.showOOBE
+      userSettings.showOOBE = true // remove ID to avoid leaking
+      sidebar.createWindow(oobeWinsertId, userSettings)
+    }
+
     console.log("winside started, listening for triggers")
 
     if (process.defaultApp) {
