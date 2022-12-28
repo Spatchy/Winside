@@ -7,18 +7,18 @@ const __ = (file) => {
 }
 
 const relativeToActualWidth = (rel, screenWidth) => {
-  return (screenWidth / 12) * rel
+  return Math.floor((screenWidth / 12) * rel)
 }
 
 const easeOutQuart = (x) => {
   try {
-    return 1 - Math.pow(1 - x, 1.15)
+    return 1 - Math.pow(1 - x, 1.05)
   } catch (error) {
     console.error(error)
   }
 }
 
-const createWindow = (winsertId, sidebarRelativeWidth = 3) => {
+const createWindow = (winsertId, userSettings, sidebarRelativeWidth = 3) => {
 
   const { screen } = require("electron")
   const primaryDisplay = screen.getPrimaryDisplay()
@@ -28,15 +28,19 @@ const createWindow = (winsertId, sidebarRelativeWidth = 3) => {
     primaryDisplay.workAreaSize.width
   )
 
-  const win = new BrowserWindow({
+  const container = new BrowserWindow({
     width: sideBarWidth,
     height: primaryDisplay.workAreaSize.height,
-    x: primaryDisplay.workAreaSize.width,
+    x: primaryDisplay.workAreaSize.width - sideBarWidth,
     y: 0,
     frame: false,
+    transparent: true,
     alwaysOnTop: true,
     resizable: false,
     skipTaskbar: true,
+  })
+
+  const win = new BrowserView({
     webPreferences: {
       preload: __("preload.js")
     }
@@ -48,16 +52,12 @@ const createWindow = (winsertId, sidebarRelativeWidth = 3) => {
     }
   })
 
-  win.loadFile(__("index.html"))
+  container.addBrowserView(win)
+
+  win.webContents.loadFile(__("index.html"))
     .then(() => {
 
-      win.setBrowserView(webContent)
-      webContent.setBounds({
-        x: 10,
-        y: 0,
-        width: sideBarWidth - 10,
-        height: primaryDisplay.workAreaSize.height
-      })
+      container.addBrowserView(webContent)
 
       // a placeholder... for now ;)
       winsertEngine.loadWinsert(webContent, "OOBE")
@@ -65,12 +65,21 @@ const createWindow = (winsertId, sidebarRelativeWidth = 3) => {
       let fraction = 0.01
       const animationInterval = setInterval(() => {
         fraction = easeOutQuart(fraction)
-        win.setPosition(
-          Math.floor(
-            primaryDisplay.workAreaSize.width - (sideBarWidth * fraction)
-          ),
-          0
+        const currentPosition = Math.floor(
+          sideBarWidth - (sideBarWidth * fraction)
         )
+        win.setBounds({
+          x: currentPosition,
+          y: 0,
+          width: sideBarWidth,
+          height: primaryDisplay.workAreaSize.height
+        })
+        webContent.setBounds({
+          x: currentPosition + 10,
+          y: 0,
+          width: sideBarWidth - 10,
+          height: primaryDisplay.workAreaSize.height
+        })
         if (fraction === 1) {
           clearInterval(animationInterval)
         }

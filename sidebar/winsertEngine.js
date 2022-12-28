@@ -11,7 +11,6 @@ const loadWinsert = (webContent, winsertId) => {
     fs.readFileSync(`${winsertPath}manifest.json`)
   )
   webContent.webContents.loadURL(manifest.mainURL).then(() => {
-    webContent.webContents.openDevTools()
     webContent.webContents.executeJavaScript(
       `window.winsideVars = {winsertId: "${winsertId}"}`
     )
