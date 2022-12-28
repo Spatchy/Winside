@@ -5,6 +5,7 @@ body, html {
   margin: 0;
   max-width: 100vw;
   overflow-x: hidden;
+  background-color: #fff;
 }
 
 .mainControlContainer {

@@ -37,7 +37,8 @@ const checkValidWinsertUri = (winsertUri) => {
   )
 
   if (winsertUri) {
-    return uuidRegexp.test(winsertUri.slice("winside://".length))
+    const winsertId = winsertUri.slice("winside://".length).replace(/\/$/, "")
+    return uuidRegexp.test(winsertId)
   }
   return false
 }
@@ -52,7 +53,7 @@ if (!instanceLock) {
       return param.startsWith("winside://")
     })
     if (checkValidWinsertUri(winsertUri)) {
-      const winsertId = winsertUri.slice("winside://".length)
+      const winsertId = winsertUri.slice("winside://".length).replace(/\/$/, "")
       sidebar.createWindow(winsertId, userSettings)
     } else {
       settings.createWindow(app.getPath("userData"), userSettings)
