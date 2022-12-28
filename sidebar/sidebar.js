@@ -71,7 +71,7 @@ const createWindow = (winsertId, sidebarRelativeWidth = 3) => {
           ),
           0
         )
-        if(fraction === 1) {
+        if (fraction === 1) {
           clearInterval(animationInterval)
         }
       }, 2)

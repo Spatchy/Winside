@@ -25,9 +25,27 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   ipcMain.on("openDataFolder", apiFunctionsMap.openDataFolder)
 
+  ipcMain.handle("browseForWinserts", async (_event) => {
+    const dialogResult = await apiFunctionsMap.openDialog({
+      title: "Install Winsert",
+      buttonLabel: "Install",
+      properties: ["openFile"],
+      filters: [
+        { name: "Winserts", extensions: ["winsert"] },
+      ]
+    })
+
+    if (dialogResult.filePaths[0] === undefined) return null
+    return apiFunctionsMap.installWinsertFromPath(dialogResult.filePaths[0])
+  })
+
+  ipcMain.handle("installDroppedWinsert", async (_event, path) => {
+    return apiFunctionsMap.installWinsertFromPath(path)
+  })
+
   ipcMain.handle("requestPermission", async (_event, permissionName) => {
     // TODO: build permissions system
-    if(permissionsNames.includes(permissionName)) {
+    if (permissionsNames.includes(permissionName)) {
       return "yeah"
     }
     return "nah"

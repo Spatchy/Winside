@@ -25,3 +25,13 @@ div.main-container {
   overflow-y: scroll;
   width: auto;
 }
+
+div.winsert-panel {
+  display: block;
+  width: 100%;
+  margin: 4px;
+  height: 50px;
+  text-align: center;
+  cursor: pointer;
+  background-color: aqua;
+}

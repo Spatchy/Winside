@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       settings[setting] = value
     }
     
-    const handlers = {
+    const clickHandlers = {
       // Menu:
       menuGeneral: (_ctrl) => {
         menuSelector("general")
@@ -46,7 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("rebuild")
       },
 
-      winsertPanel: (_ctrl) => {}, // TODO
+      winsertPanel: async (_ctrl) => {
+        const result = await window.WinsideSettings.browseForWinserts()
+        if (result) alert("Winsert installed Successfully")
+      },
 
       setSidebarLeft: (_ctrl) => {
         changeSetting("isDefaultSide", false)
@@ -102,16 +105,41 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       },
     }
+
+    const specHandlers = {
+      winsertPanel: (ctrl) => {
+        ctrl.addEventListener("dragover", (event) => {
+          event.stopPropagation()
+          event.preventDefault()
+          event.dataTransfer.dropEffect = "copy"
+        })
+
+        ctrl.addEventListener("drop", async (event) => {
+          event.stopPropagation()
+          event.preventDefault()
+          const paths = [...event.dataTransfer.files]
+            .filter(file => file.name.endsWith(".winsert"))
+            .map(file => file.path)
+          paths.forEach(async (path) => {
+            await window.WinsideSettings.installDroppedWinsert(path)
+          })
+          alert("Winsert(s) installed successfully")
+        })
+      }
+    }
   
     Array.from(document.querySelectorAll("[control]")).forEach(ctrl => {
-      if(typeof handlers[ctrl.id] === "function") {
+      if (typeof clickHandlers[ctrl.id] === "function") {
         ctrl.addEventListener("click", () => {
-          handlers[ctrl.id](ctrl)
+          clickHandlers[ctrl.id](ctrl)
           stateMap[ctrl.id] && stateMap[ctrl.id](ctrl)
         })
       }
-      if(typeof stateMap[ctrl.id] === "function") {
+      if (typeof stateMap[ctrl.id] === "function") {
         stateMap[ctrl.id](ctrl)
+      }
+      if (typeof specHandlers[ctrl.id] === "function") {
+        specHandlers[ctrl.id](ctrl)
       }
     })
 
