@@ -1,9 +1,10 @@
-const { app, ipcMain, shell } = require("electron")
+const { app, ipcMain, shell, dialog } = require("electron")
 const path = require("path")
 const sidebar = require("./sidebar/sidebar")
 const settings = require("./settings/settings")
 const setup = require("./setup")
 const winsertApi = require("./winsertApi")
+const installWinsert = require("./winsertInstaller/installWinsert")
 
 
 const userSettings = setup.check(app.getPath("userData"))
@@ -17,6 +18,14 @@ const apiFunctionsMap = {
 
   openDataFolder: () => {
     shell.showItemInFolder(app.getPath("userData"))
+  },
+
+  openDialog: (options) => {
+    return dialog.showOpenDialog(options)
+  },
+
+  installWinsertFromPath: (path) => {
+    return installWinsert.installWinsert(path, app.getPath("userData"))
   }
 }
 
