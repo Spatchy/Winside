@@ -10,6 +10,21 @@ const menuSelector = (selection) => {
     })
 }
 
+const generateWinsertListing = (winsertData) => {
+  const node = document.getElementById("winsertListingTemplate")
+  //   .cloneNode(true)
+
+  node.removeAttribute("id")
+  node.setAttribute("searchName", winsertData.displayName)
+
+  Object.keys(winsertData).forEach((key) => {
+    node.querySelector(`.${key}`)
+      .appendChild(document.createTextNode(winsertData[key]))
+  })
+
+  return node
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   window.WinsideSettings.getSettings().then((data) => {
 
@@ -141,6 +156,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof specHandlers[ctrl.id] === "function") {
         specHandlers[ctrl.id](ctrl)
       }
+    })
+
+    const winsertsListElem = document.getElementById("winsertsList")
+    window.winsideSettings.WinsertData().forEach((winsert) => {
+      winsertsListElem.appendChild(generateWinsertListing(winsert))
     })
 
   })
