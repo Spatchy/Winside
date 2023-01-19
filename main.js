@@ -5,6 +5,7 @@ const settings = require("./settings/settings")
 const setup = require("./setup")
 const winsertApi = require("./winsertApi")
 const installWinsert = require("./winsertInstaller/installWinsert")
+const uninstallWinsert = require("./winsertInstaller/uninstallWinsert")
 
 
 const userSettings = setup.check(app.getPath("userData"))
@@ -26,6 +27,14 @@ const apiFunctionsMap = {
 
   installWinsertFromPath: (path) => {
     return installWinsert.installWinsert(path, app.getPath("userData"))
+  },
+
+  uninstallWinsert: (winsertId, displayName) => {
+    return uninstallWinsert.uninstallWinsert(
+      app.getPath("userData"),
+      winsertId,
+      displayName
+    )
   }
 }
 

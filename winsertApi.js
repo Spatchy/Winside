@@ -31,10 +31,18 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return Object.keys(
       JSON.parse(fs.readFileSync(`${userData}/index.json`))
     ).map((winsertId) => {
-      return JSON.parse(
-        fs.readFileSync(`${userData}/winserts/${winsertId}/manifest.json`)
-      )
+      return {
+        winsertId: winsertId,
+        manifest: JSON.parse(
+          fs.readFileSync(`${userData}/winserts/${winsertId}/manifest.json`)
+        )
+      }
     })
+  })
+
+  ipcMain.handle("uninstallWinsert", async (_event, dataObject) => {
+    const { winsertId, displayName } = dataObject
+    return apiFunctionsMap.uninstallWinsert(winsertId, displayName)
   })
 
   ipcMain.on("openDataFolder", apiFunctionsMap.openDataFolder)

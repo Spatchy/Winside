@@ -23,5 +23,9 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
 
   installDroppedWinsert: (path) => {
     return ipcRenderer.invoke("installDroppedWinsert", path)
+  },
+
+  uninstallWinsert: (winsertId, displayName) => {
+    return ipcRenderer.invoke("uninstallWinsert", { winsertId, displayName })
   }
 })

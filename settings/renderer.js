@@ -10,18 +10,29 @@ const menuSelector = (selection) => {
     })
 }
 
-const generateWinsertListing = (winsertData) => {
-  console.log(JSON.stringify(winsertData))
+const generateWinsertListing = (winsertId, manifestData) => {
+  console.log(JSON.stringify(manifestData))
   const node = document.getElementById("winsertListingTemplate")
     .cloneNode(true)
 
-  node.removeAttribute("id")
-  node.setAttribute("searchName", winsertData.displayName)
+  node.setAttribute("id", `Winsert-${winsertId}`)
+  node.setAttribute("searchName", manifestData.displayName)
 
-  Object.keys(winsertData).forEach((key) => {
+  Object.keys(manifestData).forEach((key) => {
     node.querySelector(`.${key}`)?.appendChild(
-      document.createTextNode(winsertData[key])
+      document.createTextNode(manifestData[key])
     )
+  })
+
+  node.querySelector(".uninstall").addEventListener("click", async () => {
+    if (await window.WinsideSettings.uninstallWinsert(
+      winsertId,
+      manifestData.displayName
+    )) {
+      node.remove()
+    } else {
+      alert(`${manifestData.displayName} was not removed`)
+    }
   })
 
   return node
@@ -163,7 +174,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const winsertsListElem = document.getElementById("winsertsList")
     window.WinsideSettings.getWinsertData().then((winsertData) => {
       winsertData.forEach((winsert) => {
-        winsertsListElem.appendChild(generateWinsertListing(winsert))
+        console.log(JSON.stringify(winsert))
+        winsertsListElem.appendChild(
+          generateWinsertListing(winsert.winsertId, winsert.manifest)
+        )
       })
     })
 
