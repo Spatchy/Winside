@@ -11,15 +11,17 @@ const menuSelector = (selection) => {
 }
 
 const generateWinsertListing = (winsertData) => {
+  console.log(JSON.stringify(winsertData))
   const node = document.getElementById("winsertListingTemplate")
-  //   .cloneNode(true)
+    .cloneNode(true)
 
   node.removeAttribute("id")
   node.setAttribute("searchName", winsertData.displayName)
 
   Object.keys(winsertData).forEach((key) => {
-    node.querySelector(`.${key}`)
-      .appendChild(document.createTextNode(winsertData[key]))
+    node.querySelector(`.${key}`)?.appendChild(
+      document.createTextNode(winsertData[key])
+    )
   })
 
   return node
@@ -159,8 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     const winsertsListElem = document.getElementById("winsertsList")
-    window.winsideSettings.WinsertData().forEach((winsert) => {
-      winsertsListElem.appendChild(generateWinsertListing(winsert))
+    window.WinsideSettings.getWinsertData().then((winsertData) => {
+      winsertData.forEach((winsert) => {
+        winsertsListElem.appendChild(generateWinsertListing(winsert))
+      })
     })
 
   })

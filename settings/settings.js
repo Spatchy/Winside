@@ -11,16 +11,15 @@ const createWindow = () => {
   const primaryDisplay = screen.getPrimaryDisplay()
 
   const win = new BrowserWindow({
-    width: primaryDisplay.workAreaSize.height / 2,
+    width: primaryDisplay.workAreaSize.width / 2,
     height: primaryDisplay.workAreaSize.height / 2,
     webPreferences: {
-      preload: __("preload.js")
+      preload: __("preload.js"),
     }
   })
 
   win.loadFile(__("index.html"))
     .catch((e) => console.error(e))
-  
 }
 
 module.exports = { 

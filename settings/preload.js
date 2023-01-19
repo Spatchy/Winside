@@ -1,7 +1,4 @@
-const { contextBridge, ipcRenderer, app } = require("electron")
-const fs = require("fs")
-
-const userData = app.getPath("userData")
+const { contextBridge, ipcRenderer } = require("electron")
 
 contextBridge.exposeInMainWorld("WinsideSettings", {
   changeSetting: (setting, value) => {
@@ -10,6 +7,10 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
 
   getSettings: () => {
     return ipcRenderer.invoke("getSettings")
+  },
+
+  getWinsertData: () => {
+    return ipcRenderer.invoke("getWinsertData")
   },
 
   openDataFolder: () => {
@@ -22,13 +23,5 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
 
   installDroppedWinsert: (path) => {
     return ipcRenderer.invoke("installDroppedWinsert", path)
-  },
-
-  winsertData: Object.keys(
-    JSON.parse(fs.readFileSync(`${userData}/index.json`))
-  ).map((winsertId) => {
-    return JSON.parse(
-      fs.readFileSync(`${userData}/winserts/${winsertId}/manifest.json`)
-    )
-  })
+  }
 })
