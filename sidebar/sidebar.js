@@ -18,6 +18,41 @@ const easeOutQuart = (x) => {
   }
 }
 
+const animateWindowPosition = (
+  win,
+  webContent,
+  sideBarWidth,
+  primaryDisplay,
+  doReverse = false,
+  callback = () => {}
+) => {
+  let fraction = 0.01
+  const animationInterval = setInterval(() => {
+    fraction = easeOutQuart(fraction)
+    const currentPosition = Math.floor(
+      doReverse
+        ? sideBarWidth - (sideBarWidth * (1 - fraction))
+        : sideBarWidth - (sideBarWidth * fraction)
+    )
+    win.setBounds({
+      x: currentPosition,
+      y: 0,
+      width: sideBarWidth,
+      height: primaryDisplay.workAreaSize.height
+    })
+    webContent.setBounds({
+      x: currentPosition + 10,
+      y: 0,
+      width: sideBarWidth - 10,
+      height: primaryDisplay.workAreaSize.height
+    })
+    if (fraction === 1) {
+      clearInterval(animationInterval)
+      callback()
+    }
+  }, 2)
+}
+
 const createWindow = (winsertId, userSettings, sidebarRelativeWidth = 3) => {
 
   const { screen } = require("electron")
@@ -59,36 +94,20 @@ const createWindow = (winsertId, userSettings, sidebarRelativeWidth = 3) => {
 
       container.addBrowserView(webContent)
 
-      // a placeholder... for now ;)
-      winsertEngine.loadWinsert(webContent, "OOBE")
+      winsertEngine.loadWinsert(webContent, winsertId)
 
-      let fraction = 0.01
-      const animationInterval = setInterval(() => {
-        fraction = easeOutQuart(fraction)
-        const currentPosition = Math.floor(
-          sideBarWidth - (sideBarWidth * fraction)
-        )
-        win.setBounds({
-          x: currentPosition,
-          y: 0,
-          width: sideBarWidth,
-          height: primaryDisplay.workAreaSize.height
-        })
-        webContent.setBounds({
-          x: currentPosition + 10,
-          y: 0,
-          width: sideBarWidth - 10,
-          height: primaryDisplay.workAreaSize.height
-        })
-        if (fraction === 1) {
-          clearInterval(animationInterval)
-        }
-      }, 2)
-
-
+      animateWindowPosition(win, webContent, sideBarWidth, primaryDisplay)
 
     })
     .catch((e) => console.error(e))
+
+  container.on("close", (e) => {
+    // eslint-disable-next-line max-len
+    animateWindowPosition(win, webContent, sideBarWidth, primaryDisplay, true, () => {
+      e.sender.hide()
+    })
+    e.preventDefault() // prevent quit process
+  })
   
 }
 

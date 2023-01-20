@@ -1,4 +1,12 @@
-const { app, ipcMain, shell, dialog } = require("electron")
+const {
+  app,
+  ipcMain,
+  shell,
+  dialog,
+  Tray,
+  nativeImage,
+  Menu
+} = require("electron")
 const path = require("path")
 const sidebar = require("./sidebar/sidebar")
 const settings = require("./settings/settings")
@@ -76,6 +84,13 @@ if (!instanceLock) {
       userSettings.showOOBE = true // remove ID to avoid leaking
       sidebar.createWindow(oobeWinsertId, userSettings)
     }
+
+    const tray = new Tray(nativeImage.createEmpty())
+    const menu = Menu.buildFromTemplate([
+      { role: "quit" }
+    ])
+    tray.setToolTip("Winside is running")
+    tray.setContextMenu(menu)
 
     console.log("winside started, listening for triggers")
 

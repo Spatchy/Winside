@@ -1,12 +1,8 @@
 const fs = require("fs")
-const path = require("path")
-
-const __ = (file) => {
-  return path.join(__dirname, file)
-}
+const { app } = require("electron")
 
 const loadWinsert = (webContent, winsertId) => {
-  const winsertPath = __(`../winserts/${winsertId}/`)
+  const winsertPath = `${app.getPath("userData")}/winserts/${winsertId}/`
   const manifest = JSON.parse(
     fs.readFileSync(`${winsertPath}manifest.json`)
   )
