@@ -10,6 +10,34 @@ const menuSelector = (selection) => {
     })
 }
 
+const generateWinsertListing = (winsertId, manifestData) => {
+  console.log(JSON.stringify(manifestData))
+  const node = document.getElementById("winsertListingTemplate")
+    .cloneNode(true)
+
+  node.setAttribute("id", `Winsert-${winsertId}`)
+  node.setAttribute("searchName", manifestData.displayName)
+
+  Object.keys(manifestData).forEach((key) => {
+    node.querySelector(`.${key}`)?.appendChild(
+      document.createTextNode(manifestData[key])
+    )
+  })
+
+  node.querySelector(".uninstall").addEventListener("click", async () => {
+    if (await window.WinsideSettings.uninstallWinsert(
+      winsertId,
+      manifestData.displayName
+    )) {
+      node.remove()
+    } else {
+      alert(`${manifestData.displayName} was not removed`)
+    }
+  })
+
+  return node
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   window.WinsideSettings.getSettings().then((data) => {
 
@@ -141,6 +169,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof specHandlers[ctrl.id] === "function") {
         specHandlers[ctrl.id](ctrl)
       }
+    })
+
+    const winsertsListElem = document.getElementById("winsertsList")
+    window.WinsideSettings.getWinsertData().then((winsertData) => {
+      winsertData.forEach((winsert) => {
+        console.log(JSON.stringify(winsert))
+        winsertsListElem.appendChild(
+          generateWinsertListing(winsert.winsertId, winsert.manifest)
+        )
+      })
     })
 
   })

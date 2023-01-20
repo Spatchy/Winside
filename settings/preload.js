@@ -9,6 +9,10 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
     return ipcRenderer.invoke("getSettings")
   },
 
+  getWinsertData: () => {
+    return ipcRenderer.invoke("getWinsertData")
+  },
+
   openDataFolder: () => {
     ipcRenderer.send("openDataFolder")
   },
@@ -19,5 +23,9 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
 
   installDroppedWinsert: (path) => {
     return ipcRenderer.invoke("installDroppedWinsert", path)
+  },
+
+  uninstallWinsert: (winsertId, displayName) => {
+    return ipcRenderer.invoke("uninstallWinsert", { winsertId, displayName })
   }
 })

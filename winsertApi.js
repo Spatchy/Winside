@@ -1,3 +1,5 @@
+const fs = require("fs")
+
 const permissionsNames = [
   "see-hardware-info",
   "open-and-save-files",
@@ -5,6 +7,8 @@ const permissionsNames = [
 ]
 
 const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
+
+  const userData = app.getPath("userData")
 
   ipcMain.on("closeSidebar", () => {
     app.quit()
@@ -21,6 +25,24 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   ipcMain.handle("getSettings", async () => {
     return apiFunctionsMap.getSettings()
+  })
+
+  ipcMain.handle("getWinsertData", async () => {
+    return Object.keys(
+      JSON.parse(fs.readFileSync(`${userData}/index.json`))
+    ).map((winsertId) => {
+      return {
+        winsertId: winsertId,
+        manifest: JSON.parse(
+          fs.readFileSync(`${userData}/winserts/${winsertId}/manifest.json`)
+        )
+      }
+    })
+  })
+
+  ipcMain.handle("uninstallWinsert", async (_event, dataObject) => {
+    const { winsertId, displayName } = dataObject
+    return apiFunctionsMap.uninstallWinsert(winsertId, displayName)
   })
 
   ipcMain.on("openDataFolder", apiFunctionsMap.openDataFolder)

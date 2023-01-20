@@ -7,7 +7,7 @@ body {
   margin: 0;
 }
 
-.is-hidden {
+.is-hidden, #winsertListingTemplate {
   display: none !important;
 }
 
