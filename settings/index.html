@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; style-src 'self' 'unsafe-inline'; default-src 'self'; script-src 'self'">
     <link rel="stylesheet" href="styles.css">
     <script src="renderer.js"></script>
     <title>Settings</title>
@@ -48,6 +48,7 @@
         </div>
 
         <h5>Support</h5>
+        <div id="winsideLogoPlaceholder"></div>
         <div>Visit <a href="https://spatchy.net">spatchy.net</a></div>
       </div>
       <div class="settings-page winserts is-hidden">

@@ -4,7 +4,6 @@ const {
   shell,
   dialog,
   Tray,
-  nativeImage,
   Menu
 } = require("electron")
 const path = require("path")
@@ -85,7 +84,7 @@ if (!instanceLock) {
       sidebar.createWindow(oobeWinsertId, userSettings)
     }
 
-    const tray = new Tray(nativeImage.createEmpty())
+    const tray = new Tray("logo.ico")
     const menu = Menu.buildFromTemplate([
       { role: "quit" }
     ])

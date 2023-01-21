@@ -65,6 +65,10 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return apiFunctionsMap.installWinsertFromPath(path)
   })
 
+  ipcMain.handle("getLogoSvg", async () => {
+    return fs.readFileSync("logo.svg", "utf8")
+  })
+
   ipcMain.handle("requestPermission", async (_event, permissionName) => {
     // TODO: build permissions system
     if (permissionsNames.includes(permissionName)) {
