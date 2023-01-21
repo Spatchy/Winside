@@ -20,6 +20,11 @@ const createWindow = () => {
 
   win.loadFile(__("index.html"))
     .catch((e) => console.error(e))
+
+  win.on("close", (e) => {
+    e.sender.hide()
+    e.preventDefault() // prevent quit process
+  })
 }
 
 module.exports = { 
