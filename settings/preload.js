@@ -29,3 +29,11 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
     return ipcRenderer.invoke("uninstallWinsert", { winsertId, displayName })
   }
 })
+
+window.addEventListener("DOMContentLoaded", () => {
+  ipcRenderer.invoke("getLogoSvg").then((svgData) => {
+    console.log(svgData)
+    document.getElementById("winsideLogoPlaceholder")
+      .innerHTML = svgData
+  })
+})

@@ -13,6 +13,7 @@ const createWindow = () => {
   const win = new BrowserWindow({
     width: primaryDisplay.workAreaSize.width / 2,
     height: primaryDisplay.workAreaSize.height / 2,
+    icon: __("../logo.ico"),
     webPreferences: {
       preload: __("preload.js"),
     }

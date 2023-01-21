@@ -35,3 +35,13 @@ div.winsert-panel {
   cursor: pointer;
   background-color: aqua;
 }
+
+div#winsideLogoPlaceholder {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+svg {
+  max-width: 250px;
+}
