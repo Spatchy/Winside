@@ -3,8 +3,13 @@
   "version": "0.1",
   "developerName": "Spatchy",
   "description": "The Out-of-Box-Expereince that comes bundled with Winside",
-  "mainURL": "https://electronjs.org",
+  "mainURL": "about:blank",
+  "sidebar": {
+    "color": "#9900ff",
+    "size": 3
+  },
   "inject": {
+    "document": "index.html",
     "script": [
       "payload.js"
     ],

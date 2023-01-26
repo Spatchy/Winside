@@ -1,3 +1,94 @@
-.homepage {
-  background-color: blueviolet !important;
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
+body, html {
+  font-family: 'Questrial', sans-serif;
+  display: block;
+  height: 100%;
+  margin: 0;
 }
+
+svg {
+  max-width: 90%;
+  fill-rule:evenodd;
+  clip-rule:evenodd;
+  stroke-linejoin:round;
+  stroke-miterlimit:2;
+}
+
+.svgStyleReplace1 {
+  fill: none;
+}
+
+.svgStyleReplace2 {
+  fill:rgb(235,235,235);
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+hr {
+  margin-top: 60px;
+}
+
+button {
+  background-color: #9900ff;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+  border-width: 0;
+  border-radius: 7px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  cursor: pointer;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0px;
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+  animation-delay: 1s;
+  animation-duration: 2s;
+  animation-fill-mode: both;
+}
+
+.fadeIn2 {
+  animation-name: fadeIn;
+  animation-delay: 4s;
+  animation-duration: 2s;
+  animation-fill-mode: both;
+}
+
+.fadeIn3 {
+  animation-name: fadeIn;
+  animation-delay: 7s;
+  animation-duration: 2s;
+  animation-fill-mode: both;
+}
+
+.fadeIn4 {
+  animation-name: fadeIn;
+  animation-delay: 10s;
+  animation-duration: 2s;
+  animation-fill-mode: both;
+}
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+} 
