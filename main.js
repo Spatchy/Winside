@@ -13,6 +13,7 @@ const setup = require("./setup")
 const winsertApi = require("./winsertApi")
 const installWinsert = require("./winsertInstaller/installWinsert")
 const uninstallWinsert = require("./winsertInstaller/uninstallWinsert")
+const fs = require("fs")
 
 
 const userSettings = setup.check(app.getPath("userData"))
@@ -70,7 +71,10 @@ if (!instanceLock) {
     })
     if (checkValidWinsertUri(winsertUri)) {
       const winsertId = winsertUri.slice("winside://".length).replace(/\/$/, "")
-      sidebar.createWindow(winsertId, userSettings)
+      const manifest = JSON.parse(fs.readFileSync(
+        `${app.getPath("userData")}/winserts/${winsertId}/manifest.json`
+      ))
+      sidebar.createWindow(winsertId, userSettings, manifest)
     } else {
       settings.createWindow(app.getPath("userData"), userSettings)
     }

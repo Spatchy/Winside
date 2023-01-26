@@ -41,9 +41,9 @@ const animateWindowPosition = (
       height: primaryDisplay.workAreaSize.height
     })
     webContent.setBounds({
-      x: currentPosition + 10,
+      x: currentPosition + 15,
       y: 0,
-      width: sideBarWidth - 10,
+      width: sideBarWidth - 15,
       height: primaryDisplay.workAreaSize.height
     })
     if (fraction === 1) {
@@ -53,13 +53,15 @@ const animateWindowPosition = (
   }, 2)
 }
 
-const createWindow = (winsertId, userSettings, sidebarRelativeWidth = 3) => {
+const createWindow = (winsertId, userSettings, manifest) => {
 
   const { screen } = require("electron")
   const primaryDisplay = screen.getPrimaryDisplay()
 
   const sideBarWidth = relativeToActualWidth(
-    sidebarRelativeWidth,
+    (manifest?.sidebar?.size >= 1 && manifest?.sidebar?.size <= 11)
+      ? manifest.sidebar.size
+      : 3,
     primaryDisplay.workAreaSize.width
   )
 
@@ -83,7 +85,8 @@ const createWindow = (winsertId, userSettings, sidebarRelativeWidth = 3) => {
 
   const webContent = new BrowserView({
     webPreferences: {
-      preload: __("winsertPreload.js")
+      preload: __("winsertPreload.js"),
+      devTools: userSettings.openDevToolsOnLaunch
     }
   })
 
@@ -93,6 +96,14 @@ const createWindow = (winsertId, userSettings, sidebarRelativeWidth = 3) => {
     .then(() => {
 
       container.addBrowserView(webContent)
+      if (userSettings.openDevToolsOnLaunch) {
+        webContent.webContents.openDevTools()
+      }
+
+      win.webContents.executeJavaScript(
+        `document.getElementById("mainControlContainer")
+         .style.backgroundColor = "${manifest.sidebar.color}"`
+      )
 
       winsertEngine.loadWinsert(webContent, winsertId)
 
