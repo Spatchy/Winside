@@ -6,32 +6,47 @@ const loadWinsert = (webContent, winsertId) => {
   const manifest = JSON.parse(
     fs.readFileSync(`${winsertPath}manifest.json`)
   )
-  webContent.webContents.loadURL(manifest.mainURL).then(() => {
-    webContent.webContents.executeJavaScript(
-      `window.winsideVars = {winsertId: "${winsertId}"}`
-    )
-    manifest.inject.script.forEach((file) => {
-      fs.readFile(`${winsertPath}${file}`, (err, payload) => {
-        const payloadStr = payload.toString()
-        webContent.webContents.executeJavaScript(
-          payloadStr
-        )
-          .catch(e => console.log(e))
-          
-      })
-    })
+  webContent.webContents.loadURL(manifest.mainURL)
+    .then(async () => {
 
-    manifest.inject.style.forEach((file)=> {
-      fs.readFile(`${winsertPath}${file}`, (err, styleSheet) => {
-        const styleSheetStr = styleSheet.toString()
-        webContent.webContents.insertCSS(
-          styleSheetStr
+      const windowObject = {
+        vars: {
+          winsertId: winsertId
+        }
+      }
+
+      if (manifest.inject.document) {
+        await webContent.webContents.loadFile(
+          `${winsertPath}${manifest.inject.document}`
         )
-          .catch(e => console.log(e))
+      }
+
+      await webContent.webContents.executeJavaScript(
+        `window.Winside = ${JSON.stringify(windowObject)}`
+      )
+      manifest.inject.script.forEach((file) => {
+        fs.readFile(`${winsertPath}${file}`, (err, payload) => {
+          const payloadStr = payload.toString()
+          webContent.webContents.executeJavaScript(
+            payloadStr
+          )
+            .catch(e => console.log(e))
           
+        })
       })
-    })    
-  })
+
+      manifest.inject.style.forEach((file)=> {
+        fs.readFile(`${winsertPath}${file}`, (err, styleSheet) => {
+          const styleSheetStr = styleSheet.toString()
+          webContent.webContents.insertCSS(
+            styleSheetStr
+          )
+            .catch(e => console.log(e))
+          
+        })
+      })    
+    })
+    .catch(err => console.log(err))
 }
 
 module.exports = { loadWinsert }
