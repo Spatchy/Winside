@@ -1,11 +1,9 @@
 const fs = require("fs")
 const { app } = require("electron")
+const { loadAddon } = require("./loadAddons")
 
-const loadWinsert = (webContent, winsertId) => {
+const loadWinsert = (webContent, winsertId, manifest) => {
   const winsertPath = `${app.getPath("userData")}/winserts/${winsertId}/`
-  const manifest = JSON.parse(
-    fs.readFileSync(`${winsertPath}manifest.json`)
-  )
   webContent.webContents.loadURL(manifest.mainURL)
     .then(async () => {
 
@@ -13,6 +11,13 @@ const loadWinsert = (webContent, winsertId) => {
         vars: {
           winsertId: winsertId
         }
+      }
+
+      if (manifest.exposeAddons && manifest.exposeAddons.length > 0) {
+        windowObject.addons = {}
+        manifest.exposeAddons.forEach((addonName) => {
+          loadAddon(webContent, windowObject, addonName)
+        })
       }
 
       if (manifest.inject.document) {

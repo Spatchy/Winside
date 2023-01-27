@@ -1,5 +1,16 @@
-console.log(window.Winside.vars.winsertId)
+const init = () => {
+  console.log(window.Winside.vars.winsertId)
 
-window.WinsideAPI.requestPermission("see-hardware-info").then((res) => {
-  console.log(res)
-})
+  const questrial = new FontFace(
+    "Questrial",
+    window.Winside.addons.winsideAssets.questrialFont
+  )
+  document.fonts.add(questrial)
+
+  document.querySelector("[hidden]").removeAttribute("hidden")
+  document.getElementById("logoWrapper")
+    .innerHTML = window.Winside.addons.winsideAssets.logoSvg
+}
+
+if (document.readyState) init()
+else document.addEventListener("DOMContentLoaded", init)
