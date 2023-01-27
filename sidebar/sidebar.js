@@ -105,7 +105,7 @@ const createWindow = (winsertId, userSettings, manifest) => {
          .style.backgroundColor = "${manifest.sidebar.color}"`
       )
 
-      winsertEngine.loadWinsert(webContent, winsertId)
+      winsertEngine.loadWinsert(webContent, winsertId, manifest)
 
       animateWindowPosition(win, webContent, sideBarWidth, primaryDisplay)
 

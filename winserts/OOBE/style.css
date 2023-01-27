@@ -1,26 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
-
 body, html {
   font-family: 'Questrial', sans-serif;
   display: block;
   height: 100%;
   margin: 0;
-}
-
-svg {
-  max-width: 90%;
-  fill-rule:evenodd;
-  clip-rule:evenodd;
-  stroke-linejoin:round;
-  stroke-miterlimit:2;
-}
-
-.svgStyleReplace1 {
-  fill: none;
-}
-
-.svgStyleReplace2 {
-  fill:rgb(235,235,235);
 }
 
 .logoWrapper {

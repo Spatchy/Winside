@@ -16,5 +16,8 @@
     "style": [
       "style.css"
     ]
-  }
+  },
+  "exposeAddons": [
+    "winsideAssets"
+  ]
 }

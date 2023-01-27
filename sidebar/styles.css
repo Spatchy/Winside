@@ -18,16 +18,22 @@ body, html {
 }
 
 .closeBtn {
-  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
   color: white;
   width: 13px;
-  height: 13px;
   border-radius: 2px;
   font-size: xx-small;
-} 
+}
 
 .closeBtn:hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.closeBtn svg {
+  color: white;
 }
 
 .sidebarContent {
