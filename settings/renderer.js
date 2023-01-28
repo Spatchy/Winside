@@ -93,6 +93,10 @@ document.addEventListener("DOMContentLoaded", () => {
         changeSetting("allowAccentOverride", ctrl.checked)
       },
 
+      spatchySiteLink: (_ctrl) => {
+        window.WinsideSettings.openLinkInBrowser("https://spatchy.net/")
+      },
+
       enableDevOptions: (ctrl) => {
         changeSetting("showDeveloperOptions", ctrl.checked)
       },
