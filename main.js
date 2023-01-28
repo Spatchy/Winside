@@ -43,6 +43,10 @@ const apiFunctionsMap = {
       winsertId,
       displayName
     )
+  },
+
+  openExternal: (link) => {
+    shell.openExternal(link)
   }
 }
 
