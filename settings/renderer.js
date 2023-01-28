@@ -97,6 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
         changeSetting("showDeveloperOptions", ctrl.checked)
       },
 
+      useChromeDevTools: (ctrl) => {
+        changeSetting("openDevToolsOnLaunch", ctrl.checked)
+      }
+
     }
 
     const stateMap = {
@@ -132,6 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("menuDeveloper").classList.add("is-hidden")
         }
       },
+
+      useChromeDevTools: (ctrl) => {
+        ctrl.checked = settings.openDevToolsOnLaunch
+      }
     }
 
     const specHandlers = {
