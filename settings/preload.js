@@ -17,6 +17,8 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
     ipcRenderer.send("openDataFolder")
   },
 
+  openLinkInBrowser: (link) => ipcRenderer.send("openLinkInBrowser", link),
+
   browseForWinserts: () => {
     return ipcRenderer.invoke("browseForWinserts")
   },
