@@ -77,6 +77,10 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return "nah"
   })
 
+  ipcMain.on("openLinkInBrowser", async (_event, link) => {
+    apiFunctionsMap.openExternal(link)
+  })
+
 }
 
 module.exports = { openIpcChannels }

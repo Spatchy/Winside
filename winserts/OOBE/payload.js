@@ -10,6 +10,9 @@ const init = () => {
   document.querySelector("[hidden]").removeAttribute("hidden")
   document.getElementById("logoWrapper")
     .innerHTML = window.Winside.addons.winsideAssets.logoSvg
+  document.getElementsByTagName("button")[0].addEventListener("click", () => {
+    window.WinsideAPI.openLinkInBrowser("https://github.com/Spatchy/Winserts/")
+  })
 }
 
 if (document.readyState) init()
