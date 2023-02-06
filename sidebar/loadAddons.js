@@ -24,10 +24,13 @@ const loadAddon = (webContent, windowObject, addonName) => {
         )
           .catch(err => console.log(err))
       })
-      const questrial = fs.readFileSync("addons/assets/Questrial-Regular.ttf")
+      const questrial = fs.readFileSync(
+        "addons/assets/Questrial-Regular.ttf",
+        { encoding: "base64" }
+      )
       windowObject.addons.winsideAssets = {
         logoSvg: modifiedSvg,
-        questrialFont: questrial.toString("binary")
+        questrialFont: `url(data:font/ttf;base64,${questrial})`
       }
     }
   }[addonName]()
