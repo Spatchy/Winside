@@ -5,7 +5,13 @@ const init = () => {
     "Questrial",
     window.Winside.addons.winsideAssets.questrialFont
   )
-  document.fonts.add(questrial)
+  
+  questrial.load()
+    .then((questrialFont) => {
+      document.fonts.add(questrialFont)
+      document.body.style.fontFamily = "'Questrial', sans-serif"
+    })
+    .catch((err) => console.log(err))
 
   document.querySelector("[hidden]").removeAttribute("hidden")
   document.getElementById("logoWrapper")
