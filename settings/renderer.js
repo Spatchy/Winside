@@ -11,7 +11,6 @@ const menuSelector = (selection) => {
 }
 
 const generateWinsertListing = (winsertId, manifestData) => {
-  console.log(JSON.stringify(manifestData))
   const node = document.getElementById("winsertListingTemplate")
     .cloneNode(true)
 
@@ -39,9 +38,20 @@ const generateWinsertListing = (winsertId, manifestData) => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  window.WinsideSettings.getSettings().then((data) => {
+  window.WinsideSettings.getSettings().then(async (data) => {
 
-    const settings = data
+    const { settings, font } = data
+
+    const questrial = new FontFace(
+      "Questrial",
+      font
+    )
+
+    const questrialFont = await questrial.load()
+      
+    document.fonts.add(questrialFont)
+    document.body.style = "font-family: 'Questrial', sans-serif;"
+
     const changeSetting = (setting, value) => {
       window.WinsideSettings.changeSetting(setting, value)
       settings[setting] = value
@@ -186,7 +196,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const winsertsListElem = document.getElementById("winsertsList")
     window.WinsideSettings.getWinsertData().then((winsertData) => {
       winsertData.forEach((winsert) => {
-        console.log(JSON.stringify(winsert))
         winsertsListElem.appendChild(
           generateWinsertListing(winsert.winsertId, winsert.manifest)
         )

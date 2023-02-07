@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; style-src 'self' 'unsafe-inline'; default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; style-src 'self' 'unsafe-inline'; default-src 'self'; script-src 'self'; font-src 'self' data:;">
     <link rel="stylesheet" href="styles.css">
     <script src="renderer.js"></script>
     <title>Settings</title>
   </head>
-  <body>
+  <body style="display: none;">
     <div class="menu">
       <button control id="menuGeneral" class="menu-option">
         General

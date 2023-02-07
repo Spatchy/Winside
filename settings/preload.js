@@ -34,7 +34,6 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
 
 window.addEventListener("DOMContentLoaded", () => {
   ipcRenderer.invoke("getLogoSvg").then((svgData) => {
-    console.log(svgData)
     document.getElementById("winsideLogoPlaceholder")
       .innerHTML = svgData
   })

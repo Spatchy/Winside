@@ -24,7 +24,15 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
   })
 
   ipcMain.handle("getSettings", async () => {
-    return apiFunctionsMap.getSettings()
+    const questrial = fs.readFileSync(
+      "addons/assets/Questrial-Regular.ttf",
+      { encoding: "base64" }
+    )
+
+    return {
+      settings: apiFunctionsMap.getSettings(),
+      font: `url(data:font/ttf;base64,${questrial})`
+    }
   })
 
   ipcMain.handle("getWinsertData", async () => {
