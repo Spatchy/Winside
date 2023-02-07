@@ -8,6 +8,15 @@ const menuSelector = (selection) => {
         page.classList.add("is-hidden")
       }
     })
+  
+  Array.from(document.getElementsByClassName("menu-option"))
+    .forEach((button) => {
+      if (button.id.toLowerCase() === `menu${selection}`) {
+        button.parentElement.classList.add("is-selected")
+      } else {
+        button.parentElement.classList.remove("is-selected")
+      }
+    })
 }
 
 const generateWinsertListing = (winsertId, manifestData) => {

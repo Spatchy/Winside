@@ -1,10 +1,15 @@
 body {
   display: flex;
   flex-direction: row;
-  column-gap: 5px;
+  column-gap: 3rem;
   overflow-y: hidden;
   max-height: 100vh;
   margin: 0;
+}
+
+h1 {
+  margin-block-start: 1rem;
+  padding-top: 5px;
 }
 
 .is-hidden, #winsertListingTemplate {
@@ -12,18 +17,50 @@ body {
 }
 
 div.menu {
+  width: 10rem;
   display: flex;
   flex-direction: column;
-  background-color: #ddd;
-  padding: 1rem;
+  background-color: #eaeaf0;
+  overflow-x: visible;
+  padding-top: 1rem;
+}
+
+div.menu .button-container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+div.menu button {
+  background-color: transparent;
+  font-size: 15pt;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  cursor: pointer;
+  border: none;
+  text-align: left;
+}
+
+div.menu .button-container.is-selected {
+  background-color: #9900ffaa;
+  border-top-right-radius: 100rem;
+  border-bottom-right-radius: 100rem;
+  margin-right: -20px;
+  animation-name: menu-select-pop;
+  animation-duration: 300ms;
+}
+
+@keyframes menu-select-pop {
+  from {margin-right: 120px;}
+  to {margin-right: -20px;}
 }
 
 div.main-container {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   overflow-y: scroll;
+  flex-grow: 1;
   width: auto;
+  height: 100vh;
 }
 
 div.winsert-panel {
