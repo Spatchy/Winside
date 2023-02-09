@@ -49,7 +49,7 @@ const generateWinsertListing = (winsertId, manifestData) => {
 document.addEventListener("DOMContentLoaded", () => {
   window.WinsideSettings.getSettings().then(async (data) => {
 
-    const { settings, font } = data
+    const { settings, version, font } = data
 
     const questrial = new FontFace(
       "Questrial",
@@ -81,16 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     
       // General:
-      rescan: (_ctrl) => {
-        console.log("rescan")
-      },
-    
       dataFolder: (_ctrl) => {
         window.WinsideSettings.openDataFolder()
-      },
-    
-      rebuild: (_ctrl) => {
-        console.log("rebuild")
       },
 
       winsertPanel: async (_ctrl) => {
@@ -98,12 +90,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (result) alert("Winsert installed Successfully")
       },
 
-      setSidebarLeft: (_ctrl) => {
+      setSidebarLeft: (ctrl) => {
         changeSetting("isDefaultSide", false)
+        stateMap.setSidebarLeft(ctrl)
+        stateMap.setSidebarRight(ctrl.nextElementSibling)
       },
       
-      setSidebarRight: (_ctrl) => {
+      setSidebarRight: (ctrl) => {
         changeSetting("isDefaultSide", true)
+        stateMap.setSidebarRight(ctrl)
+        stateMap.setSidebarLeft(ctrl.previousElementSibling)
       },
       
       colorPicker: (_ctrl) => {}, // TODO
@@ -112,14 +108,11 @@ document.addEventListener("DOMContentLoaded", () => {
         changeSetting("allowAccentOverride", ctrl.checked)
       },
 
-      spatchySiteLink: (_ctrl) => {
-        window.WinsideSettings.openLinkInBrowser("https://spatchy.net/")
-      },
-
       enableDevOptions: (ctrl) => {
         changeSetting("showDeveloperOptions", ctrl.checked)
       },
 
+      // Developer
       useChromeDevTools: (ctrl) => {
         changeSetting("openDevToolsOnLaunch", ctrl.checked)
       }
@@ -133,17 +126,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       setSidebarLeft: (ctrl) => {
         if (settings.isDefaultSide) {
-          ctrl.classList.remove("is-selected")
+          ctrl.classList.add("ghost")
         } else {
-          ctrl.classList.add("is-selected")
+          ctrl.classList.remove("ghost")
         }
       },
 
       setSidebarRight: (ctrl) => {
         if (settings.isDefaultSide) {
-          ctrl.classList.add("is-selected")
+          ctrl.classList.remove("ghost")
         } else {
-          ctrl.classList.remove("is-selected")
+          ctrl.classList.add("ghost")
         }
       },
 
@@ -162,6 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       useChromeDevTools: (ctrl) => {
         ctrl.checked = settings.openDevToolsOnLaunch
+      },
+
+      appVersion: (ctrl) => {
+        ctrl.innerText = version
       }
     }
 
@@ -200,6 +197,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof specHandlers[ctrl.id] === "function") {
         specHandlers[ctrl.id](ctrl)
       }
+    })
+
+    Array.from(document.querySelectorAll("[browserLink]")).forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault()
+        window.WinsideSettings.openLinkInBrowser(link.href)
+      })
     })
 
     const winsertsListElem = document.getElementById("winsertsList")

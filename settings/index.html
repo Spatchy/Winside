@@ -6,6 +6,9 @@
     <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; style-src 'self' 'unsafe-inline'; default-src 'self'; script-src 'self'; font-src 'self' data:;">
     <link rel="stylesheet" href="styles.css">
     <script src="renderer.js"></script>
+    <script src="../addons/fontAwesome/fontawesome.min.js"></script>
+    <script src="../addons/fontAwesome/solid.min.js"></script>
+    <script src="../addons/fontAwesome/brands.min.js"></script>
     <title>Settings</title>
   </head>
   <body style="display: none;">
@@ -27,36 +30,55 @@
       </div>
     </div>
     <div class="main-container">
-      <div class="settings-page general is-active">
+      <div class="settings-page general">
         <h1>General</h1>
 
-        <h3>Data</h3>
-        <div>{winsertCount} Winserts installed <button control id="rescan">Rescan folder</button></div>
-        <button control id="dataFolder">Open data folder</button>
-        <div control id="winsertPanel" class="winsert-panel">Drag Winsert here to install or click to browse</div>
-        <button control id="rebuild">Rebuild datamap</button>
-
-        <h3>Customization</h3>
-        <div>Sidebar position
-          <button control id="setSidebarLeft">Left</button>
-          <button control id="setSidebarRight">Right</button>
+        <div class="settings-sections">
+          <section>
+            <h2><i class="fa-solid fa-hard-drive"></i>Data</h2>
+            <span><span id="winsertCount"><!--count will be inserted--></span> Winserts installed</span>
+            <button control id="dataFolder">Open data folder</button>
+            <div control id="winsertPanel" class="winsert-panel">Drag Winsert here to install or click to browse</div>
+          </section>
+          <section>
+            <h2><i class="fa-solid fa-palette"></i>Customization</h2>
+            <div>
+              Sidebar position
+              <div class="button-switch-side-container">
+                <button control id="setSidebarLeft" class="icon-button ghost"><span class="icon-large"><i class="fa-solid fa-arrow-left"></i></span>Left</button>
+                <button control id="setSidebarRight" class="icon-button"><span class="icon-large"><i class="fa-solid fa-arrow-right"></i></span>Right</button>
+              </div>
+            </div>
+            <div>Accent Color <button control id="colorPicker"><i class="fa-solid fa-eye-dropper"></i></button></div>
+            <div>
+              <input control type="checkbox" id="allowColorOverride" />
+              <span>Allow Winserts to override accent color</span>
+            </div>
+          </section>
+          <section>
+            <h2><i class="fa-solid fa-laptop-code"></i>Developer</h2>
+            <div>
+              <input control type="checkbox" id="enableDevOptions"/>
+              <span>Enable developer options</span>
+            </div>
+          </section>
+          <section>
+            <h2><i class="fa-solid fa-circle-info"></i> About</h2>
+            <div class="about-columns">
+              <div class="about-content">
+                <div>Winside by Spatchy</div>
+                <div>Version <strong control id="appVersion"><!--App version will be injected--></strong></div>
+                <div class="about-links-list">
+                  <div>Visit <a href="https://github.com/spatchy/Winside/wiki" browserLink id="spatchySiteLink">the Winside wiki</a></div>
+                  <div>Visit <a href="https://spatchy.net" browserLink id="spatchySiteLink">spatchy.net</a></div>
+                </div>
+              </div>
+              <img src="../logo.svg" class="winside-logo-svg" />
+            </div>
+            <footer><sub>This open-source software is provided under the AGPLv3 licence</sub></footer>
+          </section>
+          <footer></footer>
         </div>
-        <div>Accent Color <button control id="colorPicker">Color Picker Placeholder</button></div>
-        <div>
-          <input control type="checkbox" id="allowColorOverride" />
-          <span>Allow Winserts to override accent color</span>
-        </div>
-
-        <h3>Developer</h3>
-        <div>
-          <input control type="checkbox" id="enableDevOptions"/>
-          <span>Enable developer options</span>
-        </div>
-
-        <h5>Support</h5>
-        <div id="winsideLogoPlaceholder"></div>
-        <div>Visit <a href="#" control id="spatchySiteLink">spatchy.net</a></div>
-        <sub>This open-source software is provided under the AGPLv3 licence</sub>
       </div>
       <div class="settings-page winserts is-hidden">
         <h1>Winsert Settings</h1>
