@@ -31,6 +31,7 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
     return {
       settings: apiFunctionsMap.getSettings(),
+      version: apiFunctionsMap.getAppVersion(),
       font: `url(data:font/ttf;base64,${questrial})`
     }
   })
@@ -71,10 +72,6 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   ipcMain.handle("installDroppedWinsert", async (_event, path) => {
     return apiFunctionsMap.installWinsertFromPath(path)
-  })
-
-  ipcMain.handle("getLogoSvg", async () => {
-    return fs.readFileSync("logo.svg", "utf8")
   })
 
   ipcMain.handle("requestPermission", async (_event, permissionName) => {
