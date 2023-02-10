@@ -83,13 +83,23 @@
       <div class="settings-page winserts is-hidden">
         <h1>Winsert Settings</h1>
         <div id="winsertListingTemplate" class="winsertListing">
-          <h3 class="displayName"></h3>
-          <div class="details">
-            <div class="version"></div>
-            <div class="developerName"></div>
-            <div class="description"></div>
-          </div>
-          <button class="uninstall">X</button>
+          <section>
+            <div class="main-area">
+              <div class="main-area-text">
+                <h2 class="displayName"></h2>
+                <div class="details">
+                  Version <span class="version"></span> <strong>|</strong> <span class="developerName"></span>
+                </div>
+              </div>
+              <div class="main-area-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </div>
+            <div class="expanded-area">
+              <div class="description"></div>
+              <div class="buttons-bar">
+                <button class="uninstall"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </div>
+          </section>
         </div>
         <div id="winsertsList" class="winserts-list">
           <!--Winsert settings will be inserted-->

@@ -171,3 +171,56 @@ div.about-columns div.about-content {
 div.about-content div.about-links-list {
   margin-top: 1rem;
 }
+
+/*--- Winserts Pane ---*/
+
+#winsertsList {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 1rem;
+}
+
+div.main-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.winsertListing:not(.expanded) section, .main-area {
+  cursor: pointer;
+}
+
+.winsertListing:not(.expanded) section:hover {
+  background-color: #9900ff;
+  color: white;
+}
+
+div.main-area-arrow {
+  margin-left: auto;
+  font-size: 24pt;
+}
+
+h2.displayName {
+  margin-bottom: 0;
+}
+
+div.expanded-area {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.winsertListing:not(.expanded) div.expanded-area {
+  display: none;
+}
+
+div.expanded-area .buttons-bar {
+  margin-left: auto;
+  margin-top: 0.5rem;
+}
+
+.buttons-bar button.uninstall {
+  background-color: #dd0055;
+}

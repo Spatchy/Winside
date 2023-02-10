@@ -43,6 +43,24 @@ const generateWinsertListing = (winsertId, manifestData) => {
     }
   })
 
+  node.addEventListener("click", async (event) => {
+    if (!node.classList.contains("expanded")) {
+      node.classList.add("expanded")
+      const arrow = node.querySelector(".main-area-arrow .fa-chevron-right")
+      console.log(arrow)
+      arrow.classList.remove("fa-chevron-right")
+      arrow.classList.add("fa-chevron-down")
+    } else {
+      const mainArea = node.querySelector(".main-area")
+      if (mainArea.contains(event.target)) {
+        node.classList.remove("expanded")
+        const arrow = node.querySelector(".main-area-arrow .fa-chevron-down")
+        arrow.classList.remove("fa-chevron-down")
+        arrow.classList.add("fa-chevron-right")
+      }
+    }
+  })
+
   return node
 }
 
