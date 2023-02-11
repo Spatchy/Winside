@@ -1,10 +1,41 @@
 body {
   display: flex;
   flex-direction: row;
-  column-gap: 5px;
+  column-gap: 3rem;
   overflow-y: hidden;
   max-height: 100vh;
   margin: 0;
+}
+
+h1 {
+  margin-block-start: 1rem;
+  padding-top: 5px;
+}
+
+section {
+  background-color: #eaeaf0;
+  padding: 0.5rem;
+  border-radius: 9px;
+}
+
+h2 {
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+}
+
+h2 .svg-inline--fa {
+  color: #9900ff;
+  margin-right: 8px;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
 }
 
 .is-hidden, #winsertListingTemplate {
@@ -12,36 +43,184 @@ body {
 }
 
 div.menu {
+  width: 10rem;
   display: flex;
   flex-direction: column;
-  background-color: #ddd;
-  padding: 1rem;
+  background-color: #eaeaf0;
+  overflow-x: visible;
+  padding-top: 1rem;
+}
+
+div.menu .button-container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+div.menu button {
+  background-color: transparent;
+  font-size: 15pt;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  cursor: pointer;
+  border: none;
+  text-align: left;
+}
+
+div.menu .button-container.is-selected {
+  background-color: #9900ffaa;
+  border-top-right-radius: 100rem;
+  border-bottom-right-radius: 100rem;
+  margin-right: -20px;
+  animation-name: menu-select-pop;
+  animation-duration: 300ms;
+}
+
+@keyframes menu-select-pop {
+  from {margin-right: 120px;}
+  to {margin-right: -20px;}
 }
 
 div.main-container {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   overflow-y: scroll;
+  flex-grow: 1;
   width: auto;
+  padding-right: 3rem;
+  height: 100vh;
+}
+
+div.main-container button {
+  background-color: #9900ff;
+  color: white;
+  font-weight: bold;
+  border-width: 0;
+  border-radius: 100rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  cursor: pointer;
+}
+
+div.main-container button.icon-button {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 9px;
+  width: 5rem;
+  height: 5rem;
+}
+
+div.main-container button.icon-button.ghost {
+  box-sizing: border-box;
+  border-color: #9900ff;
+  border-width: 0.25rem;
+  border-style: solid;
+  background-color: transparent;
+  color: #9900ff;
+
+}
+
+div.button-switch-side-container {
+  padding-top: 4px;
+  padding-bottom: 1rem;
+}
+
+.icon-large {
+  font-size: 28pt;
+}
+
+div.settings-sections {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 1rem;
 }
 
 div.winsert-panel {
-  display: block;
-  width: 100%;
-  margin: 4px;
-  height: 50px;
-  text-align: center;
-  cursor: pointer;
-  background-color: aqua;
-}
-
-div#winsideLogoPlaceholder {
   display: flex;
-  align-content: center;
+  align-items: center;
   justify-content: center;
+  text-align: center;
+  height: 75px;
+  margin-top: 1rem;
+  background-color: #9900ff;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-svg {
-  max-width: 250px;
+img.winside-logo-svg {
+  max-width: 150px;
+  margin-left: auto;
+}
+
+div.about-columns {
+  display: flex;
+  flex-direction: row;
+}
+
+div.about-columns div.about-content {
+  display: flex;
+  flex-direction: column;
+}
+
+div.about-content div.about-links-list {
+  margin-top: 1rem;
+}
+
+/*--- Winserts Pane ---*/
+
+#winsertsList {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 1rem;
+}
+
+div.main-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.winsertListing:not(.expanded) section, .main-area {
+  cursor: pointer;
+}
+
+.winsertListing:not(.expanded) section:hover {
+  background-color: #9900ff;
+  color: white;
+}
+
+div.main-area-arrow {
+  margin-left: auto;
+  font-size: 24pt;
+}
+
+h2.displayName {
+  margin-bottom: 0;
+}
+
+div.expanded-area {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.winsertListing:not(.expanded) div.expanded-area {
+  display: none;
+}
+
+div.expanded-area .buttons-bar {
+  margin-left: auto;
+  margin-top: 0.5rem;
+}
+
+.buttons-bar button.uninstall {
+  background-color: #dd0055;
 }

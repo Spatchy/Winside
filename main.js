@@ -15,6 +15,8 @@ const installWinsert = require("./winsertInstaller/installWinsert")
 const uninstallWinsert = require("./winsertInstaller/uninstallWinsert")
 const fs = require("fs")
 
+const APP_VERSION = "2023.02"
+
 
 const userSettings = setup.check(app.getPath("userData"))
 
@@ -47,6 +49,10 @@ const apiFunctionsMap = {
 
   openExternal: (link) => {
     shell.openExternal(link)
+  },
+
+  getAppVersion: () => {
+    return APP_VERSION
   }
 }
 

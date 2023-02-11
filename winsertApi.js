@@ -24,7 +24,16 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
   })
 
   ipcMain.handle("getSettings", async () => {
-    return apiFunctionsMap.getSettings()
+    const questrial = fs.readFileSync(
+      "addons/assets/Questrial-Regular.ttf",
+      { encoding: "base64" }
+    )
+
+    return {
+      settings: apiFunctionsMap.getSettings(),
+      version: apiFunctionsMap.getAppVersion(),
+      font: `url(data:font/ttf;base64,${questrial})`
+    }
   })
 
   ipcMain.handle("getWinsertData", async () => {
@@ -63,10 +72,6 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   ipcMain.handle("installDroppedWinsert", async (_event, path) => {
     return apiFunctionsMap.installWinsertFromPath(path)
-  })
-
-  ipcMain.handle("getLogoSvg", async () => {
-    return fs.readFileSync("logo.svg", "utf8")
   })
 
   ipcMain.handle("requestPermission", async (_event, permissionName) => {

@@ -8,10 +8,18 @@ const menuSelector = (selection) => {
         page.classList.add("is-hidden")
       }
     })
+  
+  Array.from(document.getElementsByClassName("menu-option"))
+    .forEach((button) => {
+      if (button.id.toLowerCase() === `menu${selection}`) {
+        button.parentElement.classList.add("is-selected")
+      } else {
+        button.parentElement.classList.remove("is-selected")
+      }
+    })
 }
 
 const generateWinsertListing = (winsertId, manifestData) => {
-  console.log(JSON.stringify(manifestData))
   const node = document.getElementById("winsertListingTemplate")
     .cloneNode(true)
 
@@ -35,13 +43,48 @@ const generateWinsertListing = (winsertId, manifestData) => {
     }
   })
 
+  node.addEventListener("click", async (event) => {
+    if (!node.classList.contains("expanded")) {
+      node.classList.add("expanded")
+      const arrow = node.querySelector(".main-area-arrow .fa-chevron-right")
+      console.log(arrow)
+      arrow.classList.remove("fa-chevron-right")
+      arrow.classList.add("fa-chevron-down")
+    } else {
+      const mainArea = node.querySelector(".main-area")
+      if (mainArea.contains(event.target)) {
+        node.classList.remove("expanded")
+        const arrow = node.querySelector(".main-area-arrow .fa-chevron-down")
+        arrow.classList.remove("fa-chevron-down")
+        arrow.classList.add("fa-chevron-right")
+      }
+    }
+  })
+
   return node
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  window.WinsideSettings.getSettings().then((data) => {
+  window.WinsideSettings.getSettings().then(async (data) => {
 
-    const settings = data
+    const {
+      settings,
+      version,
+      font
+    } = data
+
+    const winsertDataPromise = window.WinsideSettings.getWinsertData()
+
+    const questrial = new FontFace(
+      "Questrial",
+      font
+    )
+
+    const questrialFont = await questrial.load()
+      
+    document.fonts.add(questrialFont)
+    document.body.style = "font-family: 'Questrial', sans-serif;"
+
     const changeSetting = (setting, value) => {
       window.WinsideSettings.changeSetting(setting, value)
       settings[setting] = value
@@ -62,16 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     
       // General:
-      rescan: (_ctrl) => {
-        console.log("rescan")
-      },
-    
       dataFolder: (_ctrl) => {
         window.WinsideSettings.openDataFolder()
-      },
-    
-      rebuild: (_ctrl) => {
-        console.log("rebuild")
       },
 
       winsertPanel: async (_ctrl) => {
@@ -79,12 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (result) alert("Winsert installed Successfully")
       },
 
-      setSidebarLeft: (_ctrl) => {
+      setSidebarLeft: (ctrl) => {
         changeSetting("isDefaultSide", false)
+        stateMap.setSidebarLeft(ctrl)
+        stateMap.setSidebarRight(ctrl.nextElementSibling)
       },
       
-      setSidebarRight: (_ctrl) => {
+      setSidebarRight: (ctrl) => {
         changeSetting("isDefaultSide", true)
+        stateMap.setSidebarRight(ctrl)
+        stateMap.setSidebarLeft(ctrl.previousElementSibling)
       },
       
       colorPicker: (_ctrl) => {}, // TODO
@@ -93,14 +132,11 @@ document.addEventListener("DOMContentLoaded", () => {
         changeSetting("allowAccentOverride", ctrl.checked)
       },
 
-      spatchySiteLink: (_ctrl) => {
-        window.WinsideSettings.openLinkInBrowser("https://spatchy.net/")
-      },
-
       enableDevOptions: (ctrl) => {
         changeSetting("showDeveloperOptions", ctrl.checked)
       },
 
+      // Developer
       useChromeDevTools: (ctrl) => {
         changeSetting("openDevToolsOnLaunch", ctrl.checked)
       }
@@ -114,17 +150,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       setSidebarLeft: (ctrl) => {
         if (settings.isDefaultSide) {
-          ctrl.classList.remove("is-selected")
+          ctrl.classList.add("ghost")
         } else {
-          ctrl.classList.add("is-selected")
+          ctrl.classList.remove("ghost")
         }
       },
 
       setSidebarRight: (ctrl) => {
         if (settings.isDefaultSide) {
-          ctrl.classList.add("is-selected")
+          ctrl.classList.remove("ghost")
         } else {
-          ctrl.classList.remove("is-selected")
+          ctrl.classList.add("ghost")
         }
       },
 
@@ -143,6 +179,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       useChromeDevTools: (ctrl) => {
         ctrl.checked = settings.openDevToolsOnLaunch
+      },
+
+      appVersion: (ctrl) => {
+        ctrl.innerText = version
+      },
+
+      winsertCount: async (ctrl) => {
+        ctrl.innerText = (await winsertDataPromise).length
       }
     }
 
@@ -183,10 +227,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })
 
+    Array.from(document.querySelectorAll("[browserLink]")).forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault()
+        window.WinsideSettings.openLinkInBrowser(link.href)
+      })
+    })
+
     const winsertsListElem = document.getElementById("winsertsList")
-    window.WinsideSettings.getWinsertData().then((winsertData) => {
+    winsertDataPromise.then((winsertData) => {
       winsertData.forEach((winsert) => {
-        console.log(JSON.stringify(winsert))
         winsertsListElem.appendChild(
           generateWinsertListing(winsert.winsertId, winsert.manifest)
         )
