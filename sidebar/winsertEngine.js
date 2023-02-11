@@ -2,9 +2,19 @@ const fs = require("fs")
 const { app } = require("electron")
 const { loadAddon } = require("./loadAddons")
 
-const loadWinsert = (webContent, winsertId, manifest) => {
+const loadWinsert = (webContent, winsertId, manifest, userSettings) => {
   const winsertPath = `${app.getPath("userData")}/winserts/${winsertId}/`
-  webContent.webContents.loadURL(manifest.mainURL)
+  
+  const loadOptions = {}
+  if (manifest.userAgent) {
+    loadOptions.userAgent = manifest.userAgent
+  }
+  if (userSettings.showDeveloperOptions && userSettings.customUserAgent) {
+    if (!manifest.userAgent || userSettings.overrideWinsertAgents) {
+      loadOptions.userAgent = userSettings.customUserAgent
+    }
+  }
+  webContent.webContents.loadURL(manifest.mainURL, loadOptions)
     .then(async () => {
 
       const windowObject = {

@@ -8,7 +8,8 @@ const defaults = {
   allowAccentOverride: true,
   showDeveloperOptions: false,
   openDevToolsOnLaunch: false,
-  customUserAgent: ""
+  customUserAgent: "",
+  overrideWinsertAgents: false
 }
 
 const init = (userData) => {

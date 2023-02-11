@@ -143,6 +143,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // Developer
       useChromeDevTools: (ctrl) => {
         changeSetting("openDevToolsOnLaunch", ctrl.checked)
+      },
+
+      overrideWinsertAgents: (ctrl) => {
+        changeSetting("overrideWinsertAgents", ctrl.checked)
       }
 
     }
@@ -187,6 +191,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       winsertCount: async (ctrl) => {
         ctrl.innerText = (await winsertDataPromise).length
+      },
+
+      customAgentInput: (ctrl) => {
+        ctrl.value = settings.customUserAgent
+      },
+
+      overrideWinsertAgents: (ctrl) => {
+        ctrl.checked = settings.overrideWinsertAgents
       }
     }
 
@@ -208,6 +220,12 @@ document.addEventListener("DOMContentLoaded", () => {
             await window.WinsideSettings.installDroppedWinsert(path)
           })
           alert("Winsert(s) installed successfully")
+        })
+      },
+
+      customAgentInput: (ctrl) => {
+        ctrl.addEventListener("change", () => {
+          window.WinsideSettings.changeSetting("customUserAgent", ctrl.value)
         })
       }
     }

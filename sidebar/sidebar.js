@@ -125,7 +125,7 @@ const createWindow = (winsertId, userSettings, manifest) => {
         )
       }
 
-      winsertEngine.loadWinsert(webContent, winsertId, manifest)
+      winsertEngine.loadWinsert(webContent, winsertId, manifest, userSettings)
 
       animateWindowPosition(
         win,
