@@ -46,6 +46,8 @@ const writeSetting = (userData, setting, value) => {
   }
   settingsData[setting] = value
   fs.writeFileSync(settingsFilepath, JSON.stringify(settingsData))
+
+  return { ...defaults, ...settingsData }
 }
 
 const check = (userData) => {

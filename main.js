@@ -18,11 +18,11 @@ const fs = require("fs")
 const APP_VERSION = "2023.02"
 
 
-const userSettings = setup.check(app.getPath("userData"))
+let userSettings = setup.check(app.getPath("userData"))
 
 const apiFunctionsMap = {
   changeSetting: (setting, value) => {
-    setup.writeSetting(app.getPath("userData"), setting, value)
+    userSettings = setup.writeSetting(app.getPath("userData"), setting, value)
   },
 
   getSettings: () => userSettings,
