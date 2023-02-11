@@ -24,15 +24,17 @@ const animateWindowPosition = (
   sideBarWidth,
   primaryDisplay,
   doReverse = false,
+  isDefaultSide = true,
   callback = () => {}
 ) => {
   let fraction = 0.01
   const animationInterval = setInterval(() => {
     fraction = easeOutQuart(fraction)
+    const adj = isDefaultSide ? 0 : sideBarWidth
     const currentPosition = Math.floor(
       doReverse
-        ? sideBarWidth - (sideBarWidth * (1 - fraction))
-        : sideBarWidth - (sideBarWidth * fraction)
+        ? (sideBarWidth - (sideBarWidth * (1 - fraction))) - adj
+        : sideBarWidth - (sideBarWidth * fraction) - adj
     )
     win.setBounds({
       x: currentPosition,
@@ -41,7 +43,7 @@ const animateWindowPosition = (
       height: primaryDisplay.workAreaSize.height
     })
     webContent.setBounds({
-      x: currentPosition + 15,
+      x: isDefaultSide ? currentPosition + 15 : currentPosition,
       y: 0,
       width: sideBarWidth - 15,
       height: primaryDisplay.workAreaSize.height
@@ -68,7 +70,9 @@ const createWindow = (winsertId, userSettings, manifest) => {
   const container = new BrowserWindow({
     width: sideBarWidth,
     height: primaryDisplay.workAreaSize.height,
-    x: primaryDisplay.workAreaSize.width - sideBarWidth,
+    x: userSettings.isDefaultSide
+      ? primaryDisplay.workAreaSize.width - sideBarWidth
+      : 0,
     y: 0,
     frame: false,
     transparent: true,
@@ -105,18 +109,43 @@ const createWindow = (winsertId, userSettings, manifest) => {
          .style.backgroundColor = "${manifest.sidebar.color}"`
       )
 
+      if (!userSettings.isDefaultSide) {
+        win.webContents.insertCSS(
+          `html, body {
+            flex-direction: row-reverse !important;
+          }
+
+          .closeBtn {
+            transform: scaleX(-1)
+          }`
+        )
+      }
+
       winsertEngine.loadWinsert(webContent, winsertId, manifest)
 
-      animateWindowPosition(win, webContent, sideBarWidth, primaryDisplay)
+      animateWindowPosition(
+        win,
+        webContent,
+        sideBarWidth,
+        primaryDisplay,
+        !userSettings.isDefaultSide,
+        userSettings.isDefaultSide
+      )
 
     })
     .catch((e) => console.error(e))
 
   container.on("close", (e) => {
-    // eslint-disable-next-line max-len
-    animateWindowPosition(win, webContent, sideBarWidth, primaryDisplay, true, () => {
-      e.sender.hide()
-    })
+    animateWindowPosition(
+      win,
+      webContent,
+      sideBarWidth,
+      primaryDisplay,
+      userSettings.isDefaultSide,
+      userSettings.isDefaultSide,
+      () => {
+        e.sender.hide()
+      })
     e.preventDefault() // prevent quit process
   })
   
