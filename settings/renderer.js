@@ -85,6 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.fonts.add(questrialFont)
     document.body.style = "font-family: 'Questrial', sans-serif;"
 
+    const rootStyle = document.querySelector(":root").style
+    rootStyle.setProperty("--accent-color", settings.accentColor)
+    rootStyle.setProperty("--accent-color-alpha", `${settings.accentColor}aa`)
+
     const changeSetting = (setting, value) => {
       window.WinsideSettings.changeSetting(setting, value)
       settings[setting] = value
@@ -139,15 +143,15 @@ document.addEventListener("DOMContentLoaded", () => {
       // Developer
       useChromeDevTools: (ctrl) => {
         changeSetting("openDevToolsOnLaunch", ctrl.checked)
+      },
+
+      overrideWinsertAgents: (ctrl) => {
+        changeSetting("overrideWinsertAgents", ctrl.checked)
       }
 
     }
 
     const stateMap = {
-      colorPicker: (ctrl) => {
-        ctrl.style.backgroundColor = settings.accentColor
-      },
-
       setSidebarLeft: (ctrl) => {
         if (settings.isDefaultSide) {
           ctrl.classList.add("ghost")
@@ -187,6 +191,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       winsertCount: async (ctrl) => {
         ctrl.innerText = (await winsertDataPromise).length
+      },
+
+      customAgentInput: (ctrl) => {
+        ctrl.value = settings.customUserAgent
+      },
+
+      overrideWinsertAgents: (ctrl) => {
+        ctrl.checked = settings.overrideWinsertAgents
       }
     }
 
@@ -208,6 +220,12 @@ document.addEventListener("DOMContentLoaded", () => {
             await window.WinsideSettings.installDroppedWinsert(path)
           })
           alert("Winsert(s) installed successfully")
+        })
+      },
+
+      customAgentInput: (ctrl) => {
+        ctrl.addEventListener("change", () => {
+          window.WinsideSettings.changeSetting("customUserAgent", ctrl.value)
         })
       }
     }

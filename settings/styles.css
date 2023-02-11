@@ -1,3 +1,8 @@
+:root {
+  --accent-color: #9900ff;
+  --accent-color-alpha: #9900ffaa
+}
+
 body {
   display: flex;
   flex-direction: row;
@@ -25,7 +30,7 @@ h2 {
 }
 
 h2 .svg-inline--fa {
-  color: #9900ff;
+  color: var(--accent-color);
   margin-right: 8px;
 }
 
@@ -67,7 +72,7 @@ div.menu button {
 }
 
 div.menu .button-container.is-selected {
-  background-color: #9900ffaa;
+  background-color: var(--accent-color-alpha);
   border-top-right-radius: 100rem;
   border-bottom-right-radius: 100rem;
   margin-right: -20px;
@@ -91,7 +96,7 @@ div.main-container {
 }
 
 div.main-container button {
-  background-color: #9900ff;
+  background-color: var(--accent-color);
   color: white;
   font-weight: bold;
   border-width: 0;
@@ -116,11 +121,11 @@ div.main-container button.icon-button {
 
 div.main-container button.icon-button.ghost {
   box-sizing: border-box;
-  border-color: #9900ff;
+  border-color: var(--accent-color);
   border-width: 0.25rem;
   border-style: solid;
   background-color: transparent;
-  color: #9900ff;
+  color: var(--accent-color);
 
 }
 
@@ -147,7 +152,7 @@ div.winsert-panel {
   text-align: center;
   height: 75px;
   margin-top: 1rem;
-  background-color: #9900ff;
+  background-color: var(--accent-color);
   color: white;
   border-radius: 8px;
   cursor: pointer;
@@ -193,7 +198,7 @@ div.main-area {
 }
 
 .winsertListing:not(.expanded) section:hover {
-  background-color: #9900ff;
+  background-color: var(--accent-color);
   color: white;
 }
 
