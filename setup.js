@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid")
 const defaults = {
   showOOBE: false,
   isDefaultSide: true,
-  accentColor: "#5dc1dc",
+  accentColor: "#9900ff",
   allowAccentOverride: true,
   showDeveloperOptions: false,
   openDevToolsOnLaunch: false,

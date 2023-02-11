@@ -104,9 +104,13 @@ const createWindow = (winsertId, userSettings, manifest) => {
         webContent.webContents.openDevTools()
       }
 
-      win.webContents.executeJavaScript(
-        `document.getElementById("mainControlContainer")
-         .style.backgroundColor = "${manifest.sidebar.color}"`
+      const colorToUse = userSettings.allowAccentOverride
+        ? manifest.sidebar.color
+        : userSettings.accentColor
+      win.webContents.insertCSS(
+        `.mainControlContainer {
+          background-color: ${colorToUse};
+        }`
       )
 
       if (!userSettings.isDefaultSide) {

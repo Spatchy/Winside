@@ -85,6 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.fonts.add(questrialFont)
     document.body.style = "font-family: 'Questrial', sans-serif;"
 
+    const rootStyle = document.querySelector(":root").style
+    rootStyle.setProperty("--accent-color", settings.accentColor)
+    rootStyle.setProperty("--accent-color-alpha", `${settings.accentColor}aa`)
+
     const changeSetting = (setting, value) => {
       window.WinsideSettings.changeSetting(setting, value)
       settings[setting] = value
@@ -144,10 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const stateMap = {
-      colorPicker: (ctrl) => {
-        ctrl.style.backgroundColor = settings.accentColor
-      },
-
       setSidebarLeft: (ctrl) => {
         if (settings.isDefaultSide) {
           ctrl.classList.add("ghost")
