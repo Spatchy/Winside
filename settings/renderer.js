@@ -67,7 +67,13 @@ const generateWinsertListing = (winsertId, manifestData) => {
 document.addEventListener("DOMContentLoaded", () => {
   window.WinsideSettings.getSettings().then(async (data) => {
 
-    const { settings, version, font } = data
+    const {
+      settings,
+      version,
+      font
+    } = data
+
+    const winsertDataPromise = window.WinsideSettings.getWinsertData()
 
     const questrial = new FontFace(
       "Questrial",
@@ -177,6 +183,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       appVersion: (ctrl) => {
         ctrl.innerText = version
+      },
+
+      winsertCount: async (ctrl) => {
+        ctrl.innerText = (await winsertDataPromise).length
       }
     }
 
@@ -225,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     const winsertsListElem = document.getElementById("winsertsList")
-    window.WinsideSettings.getWinsertData().then((winsertData) => {
+    winsertDataPromise.then((winsertData) => {
       winsertData.forEach((winsert) => {
         winsertsListElem.appendChild(
           generateWinsertListing(winsert.winsertId, winsert.manifest)

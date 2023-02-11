@@ -36,7 +36,7 @@
         <div class="settings-sections">
           <section>
             <h2><i class="fa-solid fa-hard-drive"></i>Data</h2>
-            <span><span id="winsertCount"><!--count will be inserted--></span> Winserts installed</span>
+            <span><span control id="winsertCount"><!--count will be inserted--></span> Winserts installed</span>
             <button control id="dataFolder">Open data folder</button>
             <div control id="winsertPanel" class="winsert-panel">Drag Winsert here to install or click to browse</div>
           </section>
@@ -52,7 +52,7 @@
             <div>Accent Color <button control id="colorPicker"><i class="fa-solid fa-eye-dropper"></i></button></div>
             <div>
               <input control type="checkbox" id="allowColorOverride" />
-              <span>Allow Winserts to override accent color</span>
+              <span>Allow Winserts to override accent color on sidebar</span>
             </div>
           </section>
           <section>
@@ -107,11 +107,23 @@
       </div>
       <div class="settings-page developer is-hidden">
         <h1>Developer Options</h1>
-        <div>
-          <input control type="checkbox" id="useChromeDevTools"/>
-          <span>Open Chromium dev tools when sidebar is shown</span>
+        <div class="settings-sections">
+          <section>
+            <h2><i class="fa-brands fa-chrome"></i> Chromium Dev Tools</h2>
+            <div>
+              <input control type="checkbox" id="useChromeDevTools"/>
+              <span>Open Chromium dev tools when sidebar is shown</span>
+            </div>
+          </section>
+          <section>
+            <h2><i class="fa-solid fa-passport"></i> User Agent</h2>
+            String: <input control type="text" id="customAgentInput" placeholder="Custom user agent string"/>
+            <div>
+              <input type="checkbox" id="overrideWinsertAgents">
+              <span>Override user agents defined by Winserts</span>
+            </div>
+          </section>
         </div>
-        <input control type="text" id="customAgentInput" placeholder="Custom user agent string"/>
       </div>
     </div>
   </body>
