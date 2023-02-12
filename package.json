@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "jszip": "^3.10.1",
+    "png-to-ico": "^2.1.8",
     "uuid": "^9.0.0"
   }
 }
