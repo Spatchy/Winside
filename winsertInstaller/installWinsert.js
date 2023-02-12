@@ -71,4 +71,4 @@ const installWinsert = async (
   return winsertId
 }
 
-module.exports = { installWinsert }
+module.exports = { installWinsert, createShortcut }

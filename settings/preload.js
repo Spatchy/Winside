@@ -29,5 +29,9 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
 
   uninstallWinsert: (winsertId, displayName) => {
     return ipcRenderer.invoke("uninstallWinsert", { winsertId, displayName })
+  },
+
+  saveShortcut: (winsertId, defaultName) => {
+    ipcRenderer.send("saveShortcut", winsertId, defaultName)
   }
 })

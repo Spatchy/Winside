@@ -35,6 +35,10 @@ const apiFunctionsMap = {
     return dialog.showOpenDialog(options)
   },
 
+  saveDialog: (options) => {
+    return dialog.showSaveDialog(options)
+  },
+
   installWinsertFromPath: (path) => {
     return installWinsert.installWinsert(
       path,

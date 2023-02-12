@@ -32,6 +32,10 @@ const generateWinsertListing = (winsertId, manifestData) => {
     )
   })
 
+  node.querySelector("#saveShortcut").addEventListener("click", () => {
+    window.WinsideSettings.saveShortcut(winsertId, manifestData.displayName)
+  })
+
   node.querySelector(".uninstall").addEventListener("click", async () => {
     if (await window.WinsideSettings.uninstallWinsert(
       winsertId,
