@@ -118,6 +118,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (result) alert("Winsert installed Successfully")
       },
 
+      createDesktopShortcuts: (ctrl) => {
+        changeSetting("createDesktopShortcuts", ctrl.checked)
+      },
+
+      createStartMenuShortcuts: (ctrl) => {
+        changeSetting("createStartMenuShortcuts", ctrl.checked)
+      },
+
       setSidebarLeft: (ctrl) => {
         changeSetting("isDefaultSide", false)
         stateMap.setSidebarLeft(ctrl)
@@ -152,6 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const stateMap = {
+      createDesktopShortcuts: (ctrl) => {
+        ctrl.checked = settings.createDesktopShortcuts
+      },
+
+      createStartMenuShortcuts: (ctrl) => {
+        ctrl.checked = settings.createStartMenuShortcuts
+      },
+
       setSidebarLeft: (ctrl) => {
         if (settings.isDefaultSide) {
           ctrl.classList.add("ghost")

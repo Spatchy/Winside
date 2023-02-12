@@ -3,6 +3,8 @@ const { v4: uuidv4 } = require("uuid")
 
 const defaults = {
   showOOBE: false,
+  createDesktopShortcuts: true,
+  createStartMenuShortcuts: true,
   isDefaultSide: true,
   accentColor: "#9900ff",
   allowAccentOverride: true,

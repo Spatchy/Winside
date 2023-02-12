@@ -152,6 +152,7 @@ div.winsert-panel {
   text-align: center;
   height: 75px;
   margin-top: 1rem;
+  margin-bottom: 0.5rem;
   background-color: var(--accent-color);
   color: white;
   border-radius: 8px;

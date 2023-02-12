@@ -36,7 +36,13 @@ const apiFunctionsMap = {
   },
 
   installWinsertFromPath: (path) => {
-    return installWinsert.installWinsert(path, app.getPath("userData"))
+    return installWinsert.installWinsert(
+      path,
+      app.getPath("userData"),
+      userSettings,
+      app.getPath("desktop"),
+      `${app.getPath("appData")}/Microsoft/Windows/Start Menu/Programs`
+    )
   },
 
   uninstallWinsert: (winsertId, displayName) => {
