@@ -98,6 +98,58 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return apiFunctionsMap.installWinsertFromPath(path)
   })
 
+  ipcMain.on("bundleWinsert", async () => {
+    const openResult = await apiFunctionsMap.openDialog({
+      title: "Bundle Winsert",
+      buttonLabel: "Next",
+      properties: ["openDirectory"]
+    })
+
+    if (openResult.canceled) return
+    
+    const contentsPath = openResult.filePaths[0]
+
+    if (fs.existsSync(`${contentsPath}/manifest.json`)) {
+      const defaultName = JSON.parse(
+        fs.readFileSync(`${contentsPath}/manifest.json`)
+      ).displayName
+
+      if (!defaultName) return apiFunctionsMap.showMessageBox({
+        type: "error",
+        message: "The selected directory contains a malformed manifest file"
+      })
+
+      apiFunctionsMap.showMessageBox({
+        type: "info",
+        message: [
+          "Manifest verified!",
+          "Now select an output location to save the bundled Winsert."
+        ].join("\n")
+      })
+
+      const saveResult = await (apiFunctionsMap.saveDialog({
+        title: "Select Bundle Output Path",
+        buttonLabel: "Save Bundle",
+        defaultPath: defaultName,
+        filters: [
+          { name: "Winserts", extensions: ["winsert"] }
+        ]
+      }))
+      if (!saveResult.canceled) {
+        apiFunctionsMap.bundleWinsert(contentsPath, saveResult.filePath)
+        apiFunctionsMap.showMessageBox({
+          type: "info",
+          message: "Winsert saved successfully"
+        })
+      }
+    } else {
+      return apiFunctionsMap.showMessageBox({
+        type: "error",
+        message: "The selected directory does not contain a valid manifest.json"
+      })
+    }
+  })
+
   ipcMain.handle("requestPermission", async (_event, permissionName) => {
     // TODO: build permissions system
     if (permissionsNames.includes(permissionName)) {

@@ -13,6 +13,7 @@ const setup = require("./setup")
 const winsertApi = require("./winsertApi")
 const installWinsert = require("./winsertInstaller/installWinsert")
 const uninstallWinsert = require("./winsertInstaller/uninstallWinsert")
+const winsertBundler = require("./winsertBundler/winsertBundler")
 const fs = require("fs")
 
 const APP_VERSION = "2023.02"
@@ -25,18 +26,8 @@ const apiFunctionsMap = {
     userSettings = setup.writeSetting(app.getPath("userData"), setting, value)
   },
 
-  getSettings: () => userSettings,
-
   openDataFolder: () => {
     shell.showItemInFolder(app.getPath("userData"))
-  },
-
-  openDialog: (options) => {
-    return dialog.showOpenDialog(options)
-  },
-
-  saveDialog: (options) => {
-    return dialog.showSaveDialog(options)
   },
 
   installWinsertFromPath: (path) => {
@@ -57,13 +48,13 @@ const apiFunctionsMap = {
     )
   },
 
-  openExternal: (link) => {
-    shell.openExternal(link)
-  },
-
-  getAppVersion: () => {
-    return APP_VERSION
-  }
+  getSettings: () => userSettings,
+  openExternal: shell.openExternal,
+  openDialog: dialog.showOpenDialog,
+  saveDialog: dialog.showSaveDialog,
+  showMessageBox: dialog.showMessageBoxSync,
+  bundleWinsert: winsertBundler.createWinsertBundle,
+  getAppVersion: () => APP_VERSION
 }
 
 winsertApi.openIpcChannels(app, ipcMain, apiFunctionsMap)
