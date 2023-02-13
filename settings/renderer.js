@@ -159,6 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       overrideWinsertAgents: (ctrl) => {
         changeSetting("overrideWinsertAgents", ctrl.checked)
+      },
+
+      bundleWinsert: (_ctrl) => {
+        window.WinsideSettings.bundleWinsert()
       }
 
     }

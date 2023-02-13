@@ -33,5 +33,7 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
 
   saveShortcut: (winsertId, defaultName) => {
     ipcRenderer.send("saveShortcut", winsertId, defaultName)
-  }
+  },
+
+  bundleWinsert: () => ipcRenderer.send("bundleWinsert")
 })
