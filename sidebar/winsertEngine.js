@@ -1,5 +1,5 @@
 const fs = require("fs")
-const { app } = require("electron")
+const { app, globalShortcut } = require("electron")
 const { loadAddon } = require("./loadAddons")
 
 const loadWinsert = (webContent, winsertId, manifest, userSettings) => {
@@ -59,7 +59,9 @@ const loadWinsert = (webContent, winsertId, manifest, userSettings) => {
             .catch(e => console.log(e))
           
         })
-      })    
+      })
+
+      globalShortcut.register("Super+Escape", app.quit)
     })
     .catch(err => console.log(err))
 }
