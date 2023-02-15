@@ -1,4 +1,4 @@
-const { BrowserWindow, BrowserView } = require("electron")
+const { BrowserWindow, BrowserView, globalShortcut } = require("electron")
 const path = require("path")
 const winsertEngine = require("./winsertEngine")
 
@@ -151,6 +151,7 @@ const createWindow = (winsertId, userSettings, manifest) => {
         e.sender.hide()
       })
     e.preventDefault() // prevent quit process
+    globalShortcut.unregister("Super+Escape")
   })
   
 }
