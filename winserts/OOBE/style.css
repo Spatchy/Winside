@@ -24,6 +24,10 @@ hr {
   margin-top: 60px;
 }
 
+.bottom h3 {
+  margin-block-end: 4px;
+}
+
 button {
   background-color: #9900ff;
   color: white;
@@ -40,7 +44,13 @@ button {
 
 .bottom {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
   bottom: 0px;
+  margin-bottom: 4px;
 }
 
 .fadeIn {
