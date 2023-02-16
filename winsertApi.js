@@ -162,6 +162,11 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     apiFunctionsMap.openExternal(link)
   })
 
+  ipcMain.handle("sendNotification", (_event, winsertId, title, body) => {
+    const icon = `${userData}/winserts/${winsertId}/icon.png`
+    apiFunctionsMap.sendNotification(title, body, icon)
+  })
+
 }
 
 module.exports = { openIpcChannels }

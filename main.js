@@ -4,7 +4,8 @@ const {
   shell,
   dialog,
   Tray,
-  Menu
+  Menu,
+  Notification
 } = require("electron")
 const path = require("path")
 const sidebar = require("./sidebar/sidebar")
@@ -46,6 +47,14 @@ const apiFunctionsMap = {
       winsertId,
       displayName
     )
+  },
+
+  sendNotification: (title, body, iconPath) => {
+    let icon = iconPath
+    if (!fs.existsSync(iconPath)) {
+      icon = "./logo.ico"
+    }
+    new Notification({ title: title, body: body, icon: icon }).show()
   },
 
   getSettings: () => userSettings,
