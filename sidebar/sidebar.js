@@ -1,4 +1,9 @@
-const { BrowserWindow, BrowserView, globalShortcut } = require("electron")
+const {
+  BrowserWindow,
+  BrowserView,
+  globalShortcut,
+  ipcMain
+} = require("electron")
 const path = require("path")
 const winsertEngine = require("./winsertEngine")
 
@@ -139,7 +144,8 @@ const createWindow = (winsertId, userSettings, manifest) => {
     })
     .catch((e) => console.error(e))
 
-  container.on("close", (e) => {
+  const closeFunction = () => {
+    globalShortcut.unregister("Super+Escape")
     animateWindowPosition(
       win,
       webContent,
@@ -148,11 +154,14 @@ const createWindow = (winsertId, userSettings, manifest) => {
       userSettings.isDefaultSide,
       userSettings.isDefaultSide,
       () => {
-        e.sender.hide()
-      })
-    e.preventDefault() // prevent quit process
-    globalShortcut.unregister("Super+Escape")
-  })
+        win.webContents.destroy()
+        webContent.webContents.destroy()
+        container.close()
+      }
+    )
+  }
+  globalShortcut.register("Super+Escape", closeFunction)
+  ipcMain.on("closeSidebar", closeFunction)
   
 }
 

@@ -11,10 +11,6 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   const userData = app.getPath("userData")
 
-  ipcMain.on("closeSidebar", () => {
-    app.quit()
-  })
-
   ipcMain.on("changeSetting", (_event, settingsMap) => {
     const {
       setting,

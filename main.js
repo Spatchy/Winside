@@ -131,4 +131,9 @@ if (!instanceLock) {
 
   })
 
+  // Prevent the app from quitting when all windows are closed
+  app.on("window-all-closed", () => {
+    // Do nothing
+  })
+
 }
