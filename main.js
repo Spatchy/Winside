@@ -22,6 +22,8 @@ const APP_VERSION = "2023.02"
 
 let userSettings = setup.check(app.getPath("userData"))
 
+const backgroundWinserts = {}
+
 const apiFunctionsMap = {
   changeSetting: (setting, value) => {
     userSettings = setup.writeSetting(app.getPath("userData"), setting, value)
@@ -94,7 +96,17 @@ if (!instanceLock) {
       const manifest = JSON.parse(fs.readFileSync(
         `${app.getPath("userData")}/winserts/${winsertId}/manifest.json`
       ))
-      sidebar.createWindow(winsertId, userSettings, manifest)
+      const injectView = Object.keys(backgroundWinserts).includes(winsertId)
+        ? backgroundWinserts[winsertId]
+        : null
+      sidebar.createWindow(winsertId,
+        userSettings,
+        manifest,
+        injectView,
+        (view) => {
+          backgroundWinserts[winsertId] = view
+        }
+      )
     } else {
       settings.createWindow(app.getPath("userData"), userSettings)
     }
@@ -105,7 +117,12 @@ if (!instanceLock) {
     if (userSettings.showOOBE) {
       const oobeWinsertId = userSettings.showOOBE
       userSettings.showOOBE = true // remove ID to avoid leaking
-      sidebar.createWindow(oobeWinsertId, userSettings)
+
+      const manifest = JSON.parse(fs.readFileSync(
+        `${app.getPath("userData")}/winserts/${oobeWinsertId}/manifest.json`
+      ))
+
+      sidebar.createWindow(oobeWinsertId, userSettings, manifest)
     }
 
     const tray = new Tray("logo.ico")

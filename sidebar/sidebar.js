@@ -60,7 +60,15 @@ const animateWindowPosition = (
   }, 2)
 }
 
-const createWindow = (winsertId, userSettings, manifest) => {
+const createWindow = (
+  winsertId,
+  userSettings,
+  manifest,
+  view = null,
+  saveWinsertView
+) => {
+
+  let shouldSaveWinsertView = !!view
 
   const { screen } = require("electron")
   const primaryDisplay = screen.getPrimaryDisplay()
@@ -92,7 +100,7 @@ const createWindow = (winsertId, userSettings, manifest) => {
     }
   })
 
-  const webContent = new BrowserView({
+  const webContent = view ?? new BrowserView({
     webPreferences: {
       preload: __("winsertPreload.js"),
       devTools: userSettings.openDevToolsOnLaunch
@@ -130,7 +138,9 @@ const createWindow = (winsertId, userSettings, manifest) => {
         )
       }
 
-      winsertEngine.loadWinsert(webContent, winsertId, manifest, userSettings)
+      if (!view) {
+        winsertEngine.loadWinsert(webContent, winsertId, manifest, userSettings)
+      }
 
       animateWindowPosition(
         win,
@@ -154,14 +164,23 @@ const createWindow = (winsertId, userSettings, manifest) => {
       userSettings.isDefaultSide,
       userSettings.isDefaultSide,
       () => {
-        win.webContents.destroy()
-        webContent.webContents.destroy()
-        container.close()
+        if (shouldSaveWinsertView) {
+          saveWinsertView(webContent)
+        } else {
+          webContent.webContents.destroy()
+        }
+        container.destroy()
+        ipcMain.removeListener("closeSidebar", closeFunction)
+        ipcMain.removeHandler("keepOpenInBackground")
       }
     )
   }
   globalShortcut.register("Super+Escape", closeFunction)
   ipcMain.on("closeSidebar", closeFunction)
+
+  ipcMain.handle("keepOpenInBackground", (_event, _winsertId) => {
+    shouldSaveWinsertView = true
+  })
   
 }
 

@@ -11,5 +11,9 @@ contextBridge.exposeInMainWorld("WinsideAPI", {
 
   sendNotification: (winsertId, title, body) => {
     return ipcRenderer.invoke("sendNotification", winsertId, title, body)
+  },
+
+  keepOpenInBackground: (winsertId) => {
+    return ipcRenderer.invoke("keepOpenInBackground", winsertId)
   }
 })
