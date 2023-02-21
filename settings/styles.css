@@ -43,7 +43,7 @@ footer {
   padding-bottom: 1rem;
 }
 
-.is-hidden, #winsertListingTemplate {
+.is-hidden, #winsertListingTemplate, #backgroundListingTemplate {
   display: none !important;
 }
 
@@ -194,11 +194,11 @@ div.main-area {
   flex-direction: row;
 }
 
-.winsertListing:not(.expanded) section, .main-area {
+.winsertListing:not(.expanded, .backgroundListing) section, .main-area {
   cursor: pointer;
 }
 
-.winsertListing:not(.expanded) section:hover {
+.winsertListing:not(.expanded, .backgroundListing) section:hover {
   background-color: var(--accent-color);
   color: white;
 }
@@ -222,11 +222,25 @@ div.expanded-area {
   display: none;
 }
 
-div.expanded-area .buttons-bar {
+.buttons-bar {
   margin-left: auto;
   margin-top: 0.5rem;
 }
 
-.buttons-bar button.uninstall {
+.buttons-bar button.uninstall, .background-main-area button.kill {
   background-color: #dd0055;
+}
+
+#backgroundList {
+  margin-bottom: 2rem;
+}
+
+.backgroundListing .background-main-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.background-main-area button.kill {
+  margin-left: auto;
 }

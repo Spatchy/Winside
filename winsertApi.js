@@ -29,6 +29,7 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return {
       settings: apiFunctionsMap.getSettings(),
       version: apiFunctionsMap.getAppVersion(),
+      backgroundProcesses: apiFunctionsMap.getBackgroundWinsertsList(),
       font: `url(data:font/ttf;base64,${questrial})`
     }
   })
@@ -145,6 +146,25 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
       })
     }
   })
+
+  ipcMain.handle(
+    "killBackgroundProcess",
+    async (_event, winsertId, displayName) => {
+      if (apiFunctionsMap.showMessageBox({
+        type: "question",
+        message: [
+          `Are you sure you want to stop ${displayName}?`,
+          "It will be restarted next time you open it."
+        ].join("\n"),
+        buttons: [
+          "No",
+          "Yes"
+        ]
+      })) {
+        apiFunctionsMap.kill(winsertId)
+        return true
+      }
+    })
 
   ipcMain.handle("requestPermission", async (_event, permissionName) => {
     // TODO: build permissions system

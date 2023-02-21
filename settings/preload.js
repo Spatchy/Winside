@@ -35,5 +35,13 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
     ipcRenderer.send("saveShortcut", winsertId, defaultName)
   },
 
+  killBackgroundProcess: (winsertId, displayName) => {
+    return ipcRenderer.invoke(
+      "killBackgroundProcess",
+      winsertId,
+      displayName
+    )
+  },
+
   bundleWinsert: () => ipcRenderer.send("bundleWinsert")
 })

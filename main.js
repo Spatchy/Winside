@@ -59,12 +59,18 @@ const apiFunctionsMap = {
     new Notification({ title: title, body: body, icon: icon }).show()
   },
 
+  kill: (winsertId) => {
+    backgroundWinserts[winsertId].webContents.destroy()
+    delete backgroundWinserts[winsertId]
+  },
+
   getSettings: () => userSettings,
   openExternal: shell.openExternal,
   openDialog: dialog.showOpenDialog,
   saveDialog: dialog.showSaveDialog,
   showMessageBox: dialog.showMessageBoxSync,
   bundleWinsert: winsertBundler.createWinsertBundle,
+  getBackgroundWinsertsList: () => Object.keys(backgroundWinserts),
   getAppVersion: () => APP_VERSION
 }
 
