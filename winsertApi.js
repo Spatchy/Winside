@@ -11,10 +11,6 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   const userData = app.getPath("userData")
 
-  ipcMain.on("closeSidebar", () => {
-    app.quit()
-  })
-
   ipcMain.on("changeSetting", (_event, settingsMap) => {
     const {
       setting,
@@ -33,6 +29,7 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return {
       settings: apiFunctionsMap.getSettings(),
       version: apiFunctionsMap.getAppVersion(),
+      backgroundProcesses: apiFunctionsMap.getBackgroundWinsertsList(),
       font: `url(data:font/ttf;base64,${questrial})`
     }
   })
@@ -150,6 +147,25 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     }
   })
 
+  ipcMain.handle(
+    "killBackgroundProcess",
+    async (_event, winsertId, displayName) => {
+      if (apiFunctionsMap.showMessageBox({
+        type: "question",
+        message: [
+          `Are you sure you want to stop ${displayName}?`,
+          "It will be restarted next time you open it."
+        ].join("\n"),
+        buttons: [
+          "No",
+          "Yes"
+        ]
+      })) {
+        apiFunctionsMap.kill(winsertId)
+        return true
+      }
+    })
+
   ipcMain.handle("requestPermission", async (_event, permissionName) => {
     // TODO: build permissions system
     if (permissionsNames.includes(permissionName)) {
@@ -165,6 +181,26 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
   ipcMain.handle("sendNotification", (_event, winsertId, title, body) => {
     const icon = `${userData}/winserts/${winsertId}/icon.png`
     apiFunctionsMap.sendNotification(title, body, icon)
+  })
+
+  ipcMain.handle("keepOpenInBackground", async (_event, winsertId) => {
+    apiFunctionsMap.unsetBackgroundToExpire(winsertId)
+    ipcMain.emit("keepOpenInBackground", winsertId)
+  })
+
+  ipcMain.handle("cancelKeepOpenInBackground", async (
+    _event,
+    winsertId,
+    shouldKill
+  ) => {
+    if (
+      shouldKill 
+      && apiFunctionsMap.getBackgroundWinsertsList().includes(winsertId)
+    ) {
+      apiFunctionsMap.kill(winsertId)
+    }
+    apiFunctionsMap.setBackgroundToExpire(winsertId)
+    ipcMain.emit("cancelKeepOpenInBackground", winsertId)
   })
 
 }

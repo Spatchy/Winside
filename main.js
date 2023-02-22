@@ -22,6 +22,9 @@ const APP_VERSION = "2023.02"
 
 let userSettings = setup.check(app.getPath("userData"))
 
+const backgroundWinserts = {}
+const backgroundWinsertsToExpire = {}
+
 const apiFunctionsMap = {
   changeSetting: (setting, value) => {
     userSettings = setup.writeSetting(app.getPath("userData"), setting, value)
@@ -57,12 +60,30 @@ const apiFunctionsMap = {
     new Notification({ title: title, body: body, icon: icon }).show()
   },
 
+  kill: (winsertId) => {
+    backgroundWinserts[winsertId].webContents.destroy()
+    delete backgroundWinserts[winsertId]
+  },
+
+  setBackgroundToExpire: (winsertId) => {
+    if (!(winsertId in backgroundWinsertsToExpire)) {
+      backgroundWinsertsToExpire[winsertId] = ""
+    }
+  },
+
+  unsetBackgroundToExpire: (winsertId) => {
+    if (!(winsertId in backgroundWinsertsToExpire)) {
+      delete backgroundWinsertsToExpire[winsertId]
+    }
+  },
+
   getSettings: () => userSettings,
   openExternal: shell.openExternal,
   openDialog: dialog.showOpenDialog,
   saveDialog: dialog.showSaveDialog,
   showMessageBox: dialog.showMessageBoxSync,
   bundleWinsert: winsertBundler.createWinsertBundle,
+  getBackgroundWinsertsList: () => Object.keys(backgroundWinserts),
   getAppVersion: () => APP_VERSION
 }
 
@@ -94,7 +115,24 @@ if (!instanceLock) {
       const manifest = JSON.parse(fs.readFileSync(
         `${app.getPath("userData")}/winserts/${winsertId}/manifest.json`
       ))
-      sidebar.createWindow(winsertId, userSettings, manifest)
+      const injectView = Object.keys(backgroundWinserts).includes(winsertId)
+        ? backgroundWinserts[winsertId]
+        : null
+      const shouldViewExpire = winsertId in backgroundWinsertsToExpire
+      if (shouldViewExpire) {
+        delete backgroundWinsertsToExpire[winsertId]
+        delete backgroundWinserts[winsertId]
+      }
+      sidebar.createWindow(
+        winsertId,
+        userSettings,
+        manifest,
+        injectView,
+        shouldViewExpire,
+        (view) => {
+          backgroundWinserts[winsertId] = view
+        }
+      )
     } else {
       settings.createWindow(app.getPath("userData"), userSettings)
     }
@@ -105,7 +143,12 @@ if (!instanceLock) {
     if (userSettings.showOOBE) {
       const oobeWinsertId = userSettings.showOOBE
       userSettings.showOOBE = true // remove ID to avoid leaking
-      sidebar.createWindow(oobeWinsertId, userSettings)
+
+      const manifest = JSON.parse(fs.readFileSync(
+        `${app.getPath("userData")}/winserts/${oobeWinsertId}/manifest.json`
+      ))
+
+      sidebar.createWindow(oobeWinsertId, userSettings, manifest)
     }
 
     const tray = new Tray("logo.ico")
@@ -129,6 +172,11 @@ if (!instanceLock) {
       app.setAsDefaultProtocolClient("winside")
     }
 
+  })
+
+  // Prevent the app from quitting when all windows are closed
+  app.on("window-all-closed", () => {
+    // Do nothing
   })
 
 }

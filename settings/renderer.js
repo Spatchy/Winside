@@ -68,12 +68,42 @@ const generateWinsertListing = (winsertId, manifestData) => {
   return node
 }
 
+const generateBackgroundListing = (winsertId, manifestData) => {
+  const node = document.getElementById("backgroundListingTemplate")
+    .cloneNode(true)
+
+  node.setAttribute("id", `Winsert-background-${winsertId}`)
+
+  node.querySelector(".displayName")?.appendChild(
+    document.createTextNode(manifestData.displayName)
+  )
+
+  node.querySelector(".kill").addEventListener("click", async () => {
+    if (await window.WinsideSettings.killBackgroundProcess(
+      winsertId,
+      manifestData.displayName
+    )) {
+      node.remove()
+      const backgroundListElem = document.getElementById("backgroundList")
+      if (backgroundListElem.children.length === 0) {
+        backgroundListElem
+          .innerText = "There's nothing currently running in the background"
+      }
+    } else {
+      alert(`${manifestData.displayName} was not stopped`)
+    }
+  })
+
+  return node
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   window.WinsideSettings.getSettings().then(async (data) => {
 
     const {
       settings,
       version,
+      backgroundProcesses,
       font
     } = data
 
@@ -277,12 +307,22 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     const winsertsListElem = document.getElementById("winsertsList")
+    const backgroundListElem = document.getElementById("backgroundList")
     winsertDataPromise.then((winsertData) => {
       winsertData.forEach((winsert) => {
         winsertsListElem.appendChild(
           generateWinsertListing(winsert.winsertId, winsert.manifest)
         )
+        if (backgroundProcesses.includes(winsert.winsertId)) {
+          backgroundListElem.appendChild(
+            generateBackgroundListing(winsert.winsertId, winsert.manifest)
+          )
+        }
       })
+      if (backgroundProcesses.length === 0) {
+        backgroundListElem
+          .innerText = "There's nothing currently running in the background"
+      }
     })
 
   })

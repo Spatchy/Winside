@@ -1,4 +1,9 @@
-const { BrowserWindow, BrowserView, globalShortcut } = require("electron")
+const {
+  BrowserWindow,
+  BrowserView,
+  globalShortcut,
+  ipcMain
+} = require("electron")
 const path = require("path")
 const winsertEngine = require("./winsertEngine")
 
@@ -55,7 +60,16 @@ const animateWindowPosition = (
   }, 2)
 }
 
-const createWindow = (winsertId, userSettings, manifest) => {
+const createWindow = (
+  winsertId,
+  userSettings,
+  manifest,
+  view = null,
+  shouldViewExpire = false,
+  saveWinsertView
+) => {
+
+  let shouldSaveWinsertView = (!!view) && !shouldViewExpire
 
   const { screen } = require("electron")
   const primaryDisplay = screen.getPrimaryDisplay()
@@ -87,7 +101,7 @@ const createWindow = (winsertId, userSettings, manifest) => {
     }
   })
 
-  const webContent = new BrowserView({
+  const webContent = view ?? new BrowserView({
     webPreferences: {
       preload: __("winsertPreload.js"),
       devTools: userSettings.openDevToolsOnLaunch
@@ -125,7 +139,9 @@ const createWindow = (winsertId, userSettings, manifest) => {
         )
       }
 
-      winsertEngine.loadWinsert(webContent, winsertId, manifest, userSettings)
+      if (!view) {
+        winsertEngine.loadWinsert(webContent, winsertId, manifest, userSettings)
+      }
 
       animateWindowPosition(
         win,
@@ -139,7 +155,8 @@ const createWindow = (winsertId, userSettings, manifest) => {
     })
     .catch((e) => console.error(e))
 
-  container.on("close", (e) => {
+  const closeFunction = () => {
+    globalShortcut.unregister("Super+Escape")
     animateWindowPosition(
       win,
       webContent,
@@ -148,11 +165,35 @@ const createWindow = (winsertId, userSettings, manifest) => {
       userSettings.isDefaultSide,
       userSettings.isDefaultSide,
       () => {
-        e.sender.hide()
-      })
-    e.preventDefault() // prevent quit process
-    globalShortcut.unregister("Super+Escape")
-  })
+        if (shouldSaveWinsertView) {
+          saveWinsertView(webContent)
+        } else {
+          webContent.webContents.destroy()
+        }
+        container.destroy()
+        ipcMain.off("closeSidebar", closeFunction)
+        ipcMain.off("cancelKeepOpenInBackground", cancelSaveViewFunction)
+        ipcMain.off("keepOpenInBackground", saveViewFunction)
+      }
+    )
+  }
+
+  const saveViewFunction = (saveWinsertId) => {
+    if (saveWinsertId === winsertId) {
+      shouldSaveWinsertView = true
+    }
+  }
+
+  const cancelSaveViewFunction = (cancelledWinsertId) => {
+    if (cancelledWinsertId === winsertId) {
+      shouldSaveWinsertView = false
+    }
+  }
+
+  globalShortcut.register("Super+Escape", closeFunction)
+  ipcMain.on("closeSidebar", closeFunction)
+  ipcMain.on("cancelKeepOpenInBackground", cancelSaveViewFunction)
+  ipcMain.on("keepOpenInBackground", saveViewFunction)
   
 }
 
