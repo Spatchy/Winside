@@ -65,10 +65,11 @@ const createWindow = (
   userSettings,
   manifest,
   view = null,
+  shouldViewExpire = false,
   saveWinsertView
 ) => {
 
-  let shouldSaveWinsertView = !!view
+  let shouldSaveWinsertView = (!!view) && !shouldViewExpire
 
   const { screen } = require("electron")
   const primaryDisplay = screen.getPrimaryDisplay()
@@ -170,17 +171,29 @@ const createWindow = (
           webContent.webContents.destroy()
         }
         container.destroy()
-        ipcMain.removeListener("closeSidebar", closeFunction)
-        ipcMain.removeHandler("keepOpenInBackground")
+        ipcMain.off("closeSidebar", closeFunction)
+        ipcMain.off("cancelKeepOpenInBackground", cancelSaveViewFunction)
+        ipcMain.off("keepOpenInBackground", saveViewFunction)
       }
     )
   }
+
+  const saveViewFunction = (saveWinsertId) => {
+    if (saveWinsertId === winsertId) {
+      shouldSaveWinsertView = true
+    }
+  }
+
+  const cancelSaveViewFunction = (cancelledWinsertId) => {
+    if (cancelledWinsertId === winsertId) {
+      shouldSaveWinsertView = false
+    }
+  }
+
   globalShortcut.register("Super+Escape", closeFunction)
   ipcMain.on("closeSidebar", closeFunction)
-
-  ipcMain.handle("keepOpenInBackground", (_event, _winsertId) => {
-    shouldSaveWinsertView = true
-  })
+  ipcMain.on("cancelKeepOpenInBackground", cancelSaveViewFunction)
+  ipcMain.on("keepOpenInBackground", saveViewFunction)
   
 }
 

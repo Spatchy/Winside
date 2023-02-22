@@ -15,5 +15,13 @@ contextBridge.exposeInMainWorld("WinsideAPI", {
 
   keepOpenInBackground: (winsertId) => {
     return ipcRenderer.invoke("keepOpenInBackground", winsertId)
+  },
+
+  cancelKeepOpenInBackground: (winsertId, killIfInBackground = false) => {
+    return ipcRenderer.invoke(
+      "cancelKeepOpenInBackground",
+      winsertId,
+      killIfInBackground
+    )
   }
 })

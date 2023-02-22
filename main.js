@@ -23,6 +23,7 @@ const APP_VERSION = "2023.02"
 let userSettings = setup.check(app.getPath("userData"))
 
 const backgroundWinserts = {}
+const backgroundWinsertsToExpire = {}
 
 const apiFunctionsMap = {
   changeSetting: (setting, value) => {
@@ -62,6 +63,18 @@ const apiFunctionsMap = {
   kill: (winsertId) => {
     backgroundWinserts[winsertId].webContents.destroy()
     delete backgroundWinserts[winsertId]
+  },
+
+  setBackgroundToExpire: (winsertId) => {
+    if (!(winsertId in backgroundWinsertsToExpire)) {
+      backgroundWinsertsToExpire[winsertId] = ""
+    }
+  },
+
+  unsetBackgroundToExpire: (winsertId) => {
+    if (!(winsertId in backgroundWinsertsToExpire)) {
+      delete backgroundWinsertsToExpire[winsertId]
+    }
   },
 
   getSettings: () => userSettings,
@@ -105,10 +118,17 @@ if (!instanceLock) {
       const injectView = Object.keys(backgroundWinserts).includes(winsertId)
         ? backgroundWinserts[winsertId]
         : null
-      sidebar.createWindow(winsertId,
+      const shouldViewExpire = winsertId in backgroundWinsertsToExpire
+      if (shouldViewExpire) {
+        delete backgroundWinsertsToExpire[winsertId]
+        delete backgroundWinserts[winsertId]
+      }
+      sidebar.createWindow(
+        winsertId,
         userSettings,
         manifest,
         injectView,
+        shouldViewExpire,
         (view) => {
           backgroundWinserts[winsertId] = view
         }

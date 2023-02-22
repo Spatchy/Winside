@@ -183,6 +183,26 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     apiFunctionsMap.sendNotification(title, body, icon)
   })
 
+  ipcMain.handle("keepOpenInBackground", async (_event, winsertId) => {
+    apiFunctionsMap.unsetBackgroundToExpire(winsertId)
+    ipcMain.emit("keepOpenInBackground", winsertId)
+  })
+
+  ipcMain.handle("cancelKeepOpenInBackground", async (
+    _event,
+    winsertId,
+    shouldKill
+  ) => {
+    if (
+      shouldKill 
+      && apiFunctionsMap.getBackgroundWinsertsList().includes(winsertId)
+    ) {
+      apiFunctionsMap.kill(winsertId)
+    }
+    apiFunctionsMap.setBackgroundToExpire(winsertId)
+    ipcMain.emit("cancelKeepOpenInBackground", winsertId)
+  })
+
 }
 
 module.exports = { openIpcChannels }
