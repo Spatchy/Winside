@@ -1,6 +1,9 @@
 const { contextBridge, ipcRenderer } = require("electron")
 
 contextBridge.exposeInMainWorld("WinsideAPI", {
+
+  getAppVersion: () => ipcRenderer.invoke("getAppVersion"),
+
   openLinkInBrowser: (link) => ipcRenderer.send("openLinkInBrowser", link),
 
   requestPermission: (permissionName) => {

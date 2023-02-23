@@ -174,6 +174,10 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return "nah"
   })
 
+  ipcMain.handle("getAppVersion", () => {
+    return apiFunctionsMap.getAppVersion()
+  })
+
   ipcMain.on("openLinkInBrowser", async (_event, link) => {
     apiFunctionsMap.openExternal(link)
   })
