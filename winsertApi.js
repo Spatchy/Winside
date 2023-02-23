@@ -1,5 +1,8 @@
 const fs = require("fs")
-const { createShortcut } = require("./winsertInstaller/installWinsert")
+const {
+  createShortcut,
+  createIco
+} = require("./winsertInstaller/installWinsert")
 
 const permissionsNames = [
   "see-hardware-info",
@@ -62,11 +65,14 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     const splitPath =  dialogResult.filePath.split("\\")
     const shortcutName = splitPath.pop().slice(0, -4) // ".url" length
 
-    let icoPath = `${userData}/winserts/${winsertId}/icon.ico`
-    if (!fs.existsSync(icoPath)) {
-      icoPath = undefined
+    const rawIconPath = `${userData}/winserts/${winsertId}/icon`
+    let icoPath
+    if (!fs.existsSync(`${rawIconPath}.ico`)) {
+      if (fs.existsSync(`${rawIconPath}.png`)) {
+        await createIco(rawIconPath)
+        icoPath = `${rawIconPath}.ico`
+      }
     }
-
     createShortcut(shortcutName, winsertId, splitPath.join("\\"), icoPath)
   })
 
