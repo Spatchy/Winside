@@ -29,6 +29,12 @@ const updateIndex = (indexPath, uuid, winsertName) => {
   fs.writeFileSync(indexPath, JSON.stringify(indexData, null, 2))
 }
 
+const createIco = async (rawIconPath) => {
+  const icoPath = `${rawIconPath}.ico`
+  const icoData = await pngToIco(`${rawIconPath}.png`)
+  fs.writeFileSync(icoPath, icoData)
+}
+
 const createShortcut = (winsertName, winsertId, outPath, icoPath) => {
   const icoPathToUse = icoPath ?? __("../logo.ico")
   fs.writeFileSync(`${outPath}/${winsertName}.url`, [
@@ -57,9 +63,7 @@ const installWinsert = async (
   let icoPath
   const rawIconPath = `${userData}/winserts/${winsertId}/icon`
   if (fs.existsSync(`${rawIconPath}.png`)) {
-    icoPath = `${rawIconPath}.ico`
-    const icoData = await pngToIco(`${rawIconPath}.png`)
-    fs.writeFileSync(icoPath, icoData)
+    createIco(rawIconPath)
   }
 
   if (userSettings.createDesktopShortcuts) {
@@ -71,4 +75,4 @@ const installWinsert = async (
   return winsertId
 }
 
-module.exports = { installWinsert, createShortcut }
+module.exports = { installWinsert, createShortcut, createIco }
