@@ -6,8 +6,8 @@ contextBridge.exposeInMainWorld("WinsideAPI", {
 
   openLinkInBrowser: (link) => ipcRenderer.send("openLinkInBrowser", link),
 
-  requestPermission: (permissionName) => {
-    return ipcRenderer.invoke("requestPermission", permissionName)
+  requestPermission: (winsertId, permissionName) => {
+    return ipcRenderer.invoke("requestPermission", winsertId, permissionName)
   },
 
   sendNotification: (winsertId, title, body) => {

@@ -3,12 +3,7 @@ const {
   createShortcut,
   createIco
 } = require("./winsertInstaller/installWinsert")
-
-const permissionsNames = [
-  "see-hardware-info",
-  "open-and-save-files",
-  "send-notifications"
-]
+const permissionsEngine = require("./permissionsManager/permissionsEngine")
 
 const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
@@ -172,12 +167,29 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
       }
     })
 
-  ipcMain.handle("requestPermission", async (_event, permissionName) => {
-    // TODO: build permissions system
-    if (permissionsNames.includes(permissionName)) {
-      return "yeah"
+  ipcMain.handle("requestPermission", async (
+    _event,
+    winsertId,
+    permissionName
+  ) => {
+    const displayName = apiFunctionsMap.getWinsertDisplayName(winsertId)
+    if (displayName === undefined) return new Error("Invalid Winsert ID")
+    if (apiFunctionsMap.showMessageBox({
+      type: "question",
+      message: `${displayName} is requesting to ${
+        permissionsEngine.getPermissionMessage(permissionName)
+      }`,
+      buttons: [
+        "Deny",
+        "Allow"
+      ]
+    })) {
+      permissionsEngine.grantPermission(winsertId, permissionName)
+      return true
+    } else {
+      permissionsEngine.revokePermission(winsertId, permissionName)
+      return false
     }
-    return "nah"
   })
 
   ipcMain.handle("getAppVersion", () => {
@@ -189,11 +201,17 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
   })
 
   ipcMain.handle("sendNotification", (_event, winsertId, title, body) => {
+    if (!permissionsEngine.checkPermission(winsertId, "sendNotifications")) {
+      return new Error("Insufficient Permissions")
+    }
     const icon = `${userData}/winserts/${winsertId}/icon.png`
     apiFunctionsMap.sendNotification(title, body, icon)
   })
 
   ipcMain.handle("keepOpenInBackground", async (_event, winsertId) => {
+    if (!permissionsEngine.checkPermission(winsertId, "keepOpenInBackground")) {
+      return new Error("Insufficient Permissions")
+    }
     apiFunctionsMap.unsetBackgroundToExpire(winsertId)
     ipcMain.emit("keepOpenInBackground", winsertId)
   })
