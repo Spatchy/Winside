@@ -1,12 +1,15 @@
 const { dialog } = require("electron")
 const fs = require("fs")
 
-const uninstallWinsert = async (userData, winsertId, displayName) => {
-  const dialogResult = await dialog.showMessageBox({
+const uninstallWinsert = (userData, winsertId, displayName) => {
+  const dialogResult = dialog.showMessageBoxSync({
     type: "warning",
     title: "Uninstall",
     message: `Are you sure you want to permanently uninstall ${displayName}?`,
-    buttons: ["Uninstall", "Cancel"],
+    buttons: [
+      "Cancel",
+      "Uninstall"
+    ],
     defaultId: 1,
     noLink: true
   })
@@ -21,7 +24,7 @@ const uninstallWinsert = async (userData, winsertId, displayName) => {
         { recursive: true, force: true }
       )
 
-      await dialog.showMessageBox({
+      dialog.showMessageBoxSync({
         type: "info",
         title: "Uninstall",
         message: `${displayName} was uninstalled successfully`,
