@@ -116,6 +116,19 @@
             </div>
             <div class="expanded-area">
               <div class="description"></div>
+              <div class="permissions-area">
+                <div class="permissions-header">
+                  <span class="number-of-perms"><!--num of perms will be inserted--></span>
+                  <span class="number-of-perms-message"><!--message will be inserted--></span>
+                  <span class="permissions-header-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+                </div>
+                <div class="permissions-table is-hidden">
+                  <div class="permission-row" id="permissionRowTemplate">
+                    <i class="fa-solid fa-circle-xmark revoke-permission"></i>
+                    <span class="permission-name"></span>
+                  </div>
+                </div>
+              </div>
               <div class="buttons-bar">
                 <button id="saveShortcut"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                 <button class="uninstall"><i class="fa-solid fa-trash"></i></button>

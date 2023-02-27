@@ -43,5 +43,14 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
     )
   },
 
+  revokePermission: (winsertId, displayName, permission) => {
+    return ipcRenderer.invoke(
+      "revokePermission",
+      winsertId,
+      displayName,
+      permission
+    )
+  },
+
   bundleWinsert: () => ipcRenderer.send("bundleWinsert")
 })

@@ -1,6 +1,7 @@
 :root {
   --accent-color: #9900ff;
-  --accent-color-alpha: #9900ffaa
+  --accent-color-alpha: #9900ffaa;
+  --danger-color: #dd0055;
 }
 
 body {
@@ -43,7 +44,10 @@ footer {
   padding-bottom: 1rem;
 }
 
-.is-hidden, #winsertListingTemplate, #backgroundListingTemplate {
+.is-hidden,
+#winsertListingTemplate,
+#backgroundListingTemplate,
+#permissionRowTemplate {
   display: none !important;
 }
 
@@ -228,7 +232,7 @@ div.expanded-area {
 }
 
 .buttons-bar button.uninstall, .background-main-area button.kill {
-  background-color: #dd0055;
+  background-color: var(--danger-color);
 }
 
 #backgroundList {
@@ -243,4 +247,42 @@ div.expanded-area {
 
 .background-main-area button.kill {
   margin-left: auto;
+}
+
+.permissions-header {
+  display: flex;
+  width: fit-content;
+  margin-top: 1rem;
+  padding: 2px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.permissions-header:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.permissions-header .permissions-header-arrow {
+  margin-left: 4px;
+}
+
+.permissions-table {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+  margin-top: 4px;
+}
+
+.permission-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 2px;
+}
+
+.revoke-permission {
+  color: var(--danger-color);
+  cursor: pointer;
 }

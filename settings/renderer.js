@@ -19,7 +19,7 @@ const menuSelector = (selection) => {
     })
 }
 
-const generateWinsertListing = (winsertId, manifestData) => {
+const generateWinsertListing = (winsertId, manifestData, permissionsData) => {
   const node = document.getElementById("winsertListingTemplate")
     .cloneNode(true)
 
@@ -47,11 +47,70 @@ const generateWinsertListing = (winsertId, manifestData) => {
     }
   })
 
+  if (permissionsData) {
+    const grantedPermisionsArr = Object.keys(permissionsData).filter((perm) => {
+      return permissionsData[perm]
+    })
+    const permissionsHeader = node.querySelector(".permissions-header")
+    const permissionsTable = node.querySelector(".permissions-table")
+    grantedPermisionsArr.forEach((permissionName) => {
+      const row = document.getElementById("permissionRowTemplate")
+        .cloneNode(true)
+
+      row.setAttribute("id", `permission-${permissionName}-${winsertId}`)
+      row.querySelector(".permission-name").innerText = permissionName
+      row.querySelector(".revoke-permission").addEventListener("click", () => {
+        window.WinsideSettings.revokePermission(
+          winsertId,
+          manifestData.displayName,
+          permissionName
+        ).then((result) => {
+          if (result === true) {
+            row.remove()
+            node.querySelector(".number-of-perms").innerText -= 1
+          }
+        })
+      })
+      permissionsTable.appendChild(row)
+    })
+
+    const numOfPermissions = grantedPermisionsArr.length
+    const singleOrMultiple = numOfPermissions === 1
+      ? "\xa0permission has"
+      : "\xa0permissions have"
+    permissionsHeader.querySelector(".number-of-perms")
+      .innerText = numOfPermissions
+    permissionsHeader.querySelector(".number-of-perms-message")
+      .innerText = `${singleOrMultiple} been granted`
+
+    permissionsHeader.addEventListener("click", async () => {
+      if (!permissionsHeader.classList.contains("expanded")) {
+        permissionsHeader.classList.add("expanded")
+        const arrow = permissionsHeader.querySelector(
+          ".permissions-header-arrow .fa-chevron-right"
+        )
+        arrow.classList.remove("fa-chevron-right")
+        arrow.classList.add("fa-chevron-down")
+        permissionsTable.classList.remove("is-hidden")
+      } else {
+        permissionsHeader.classList.remove("expanded")
+        const arrow = permissionsHeader.querySelector(
+          ".permissions-header-arrow .fa-chevron-down"
+        )
+        arrow.classList.remove("fa-chevron-down")
+        arrow.classList.add("fa-chevron-right")
+        permissionsTable.classList.add("is-hidden")
+      }
+    })
+
+  } else {
+    node.querySelector(".permissions-header").classList.add("is-hidden")
+  }
+
   node.addEventListener("click", async (event) => {
     if (!node.classList.contains("expanded")) {
       node.classList.add("expanded")
       const arrow = node.querySelector(".main-area-arrow .fa-chevron-right")
-      console.log(arrow)
       arrow.classList.remove("fa-chevron-right")
       arrow.classList.add("fa-chevron-down")
     } else {
@@ -104,8 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
       settings,
       version,
       backgroundProcesses,
+      permissions,
       font
     } = data
+
+    console.log(JSON.stringify(permissions))
 
     const winsertDataPromise = window.WinsideSettings.getWinsertData()
 
@@ -311,7 +373,11 @@ document.addEventListener("DOMContentLoaded", () => {
     winsertDataPromise.then((winsertData) => {
       winsertData.forEach((winsert) => {
         winsertsListElem.appendChild(
-          generateWinsertListing(winsert.winsertId, winsert.manifest)
+          generateWinsertListing(
+            winsert.winsertId,
+            winsert.manifest,
+            permissions[winsert.winsertId]
+          )
         )
         if (backgroundProcesses.includes(winsert.winsertId)) {
           backgroundListElem.appendChild(

@@ -28,6 +28,7 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
       settings: apiFunctionsMap.getSettings(),
       version: apiFunctionsMap.getAppVersion(),
       backgroundProcesses: apiFunctionsMap.getBackgroundWinsertsList(),
+      permissions: permissionsEngine.getAllPermissions(),
       font: `url(data:font/ttf;base64,${questrial})`
     }
   })
@@ -165,7 +166,33 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
         apiFunctionsMap.kill(winsertId)
         return true
       }
-    })
+    }
+  )
+
+  ipcMain.handle("revokePermission", async (
+    _event,
+    winsertId,
+    displayName,
+    permissionName
+  ) => {
+    if (apiFunctionsMap.showMessageBox({
+      type: "question",
+      message:[
+        "Are you sure you want to remove",
+        permissionName,
+        `from ${displayName}?`
+      ].join(" "),
+      buttons: [
+        "No",
+        "Yes"
+      ]
+    })) {
+      permissionsEngine.revokePermission(winsertId, permissionName)
+      return true
+    } else {
+      return false
+    }
+  })
 
   ipcMain.handle("requestPermission", async (
     _event,
