@@ -23,7 +23,7 @@ const createWindow = () => {
     .catch((e) => console.error(e))
 
   win.on("close", (e) => {
-    e.sender.hide()
+    e.sender.destroy()
     e.preventDefault() // prevent quit process
   })
 }

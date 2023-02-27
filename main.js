@@ -77,6 +77,12 @@ const apiFunctionsMap = {
     }
   },
 
+  getWinsertDisplayName: (winsertId) => {
+    return JSON.parse(
+      fs.readFileSync(`${app.getPath("userData")}/index.json`)
+    )[winsertId]
+  },
+
   getSettings: () => userSettings,
   openExternal: shell.openExternal,
   openDialog: dialog.showOpenDialog,

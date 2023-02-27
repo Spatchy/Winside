@@ -3,12 +3,7 @@ const {
   createShortcut,
   createIco
 } = require("./winsertInstaller/installWinsert")
-
-const permissionsNames = [
-  "see-hardware-info",
-  "open-and-save-files",
-  "send-notifications"
-]
+const permissionsEngine = require("./permissionsManager/permissionsEngine")
 
 const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
@@ -33,6 +28,7 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
       settings: apiFunctionsMap.getSettings(),
       version: apiFunctionsMap.getAppVersion(),
       backgroundProcesses: apiFunctionsMap.getBackgroundWinsertsList(),
+      permissions: permissionsEngine.getAllPermissions(),
       font: `url(data:font/ttf;base64,${questrial})`
     }
   })
@@ -170,14 +166,57 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
         apiFunctionsMap.kill(winsertId)
         return true
       }
-    })
-
-  ipcMain.handle("requestPermission", async (_event, permissionName) => {
-    // TODO: build permissions system
-    if (permissionsNames.includes(permissionName)) {
-      return "yeah"
     }
-    return "nah"
+  )
+
+  ipcMain.handle("revokePermission", async (
+    _event,
+    winsertId,
+    displayName,
+    permissionName
+  ) => {
+    if (apiFunctionsMap.showMessageBox({
+      type: "question",
+      message:[
+        "Are you sure you want to remove",
+        permissionName,
+        `from ${displayName}?`
+      ].join(" "),
+      buttons: [
+        "No",
+        "Yes"
+      ]
+    })) {
+      permissionsEngine.revokePermission(winsertId, permissionName)
+      return true
+    } else {
+      return false
+    }
+  })
+
+  ipcMain.handle("requestPermission", async (
+    _event,
+    winsertId,
+    permissionName
+  ) => {
+    const displayName = apiFunctionsMap.getWinsertDisplayName(winsertId)
+    if (displayName === undefined) return new Error("Invalid Winsert ID")
+    if (apiFunctionsMap.showMessageBox({
+      type: "question",
+      message: `${displayName} is requesting to ${
+        permissionsEngine.getPermissionMessage(permissionName)
+      }`,
+      buttons: [
+        "Deny",
+        "Allow"
+      ]
+    })) {
+      permissionsEngine.grantPermission(winsertId, permissionName)
+      return true
+    } else {
+      permissionsEngine.revokePermission(winsertId, permissionName)
+      return false
+    }
   })
 
   ipcMain.handle("getAppVersion", () => {
@@ -189,11 +228,17 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
   })
 
   ipcMain.handle("sendNotification", (_event, winsertId, title, body) => {
+    if (!permissionsEngine.checkPermission(winsertId, "sendNotifications")) {
+      return new Error("Insufficient Permissions")
+    }
     const icon = `${userData}/winserts/${winsertId}/icon.png`
     apiFunctionsMap.sendNotification(title, body, icon)
   })
 
   ipcMain.handle("keepOpenInBackground", async (_event, winsertId) => {
+    if (!permissionsEngine.checkPermission(winsertId, "keepOpenInBackground")) {
+      return new Error("Insufficient Permissions")
+    }
     apiFunctionsMap.unsetBackgroundToExpire(winsertId)
     ipcMain.emit("keepOpenInBackground", winsertId)
   })
