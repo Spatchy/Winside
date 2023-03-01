@@ -17,6 +17,8 @@ const uninstallWinsert = require("./winsertInstaller/uninstallWinsert")
 const winsertBundler = require("./winsertBundler/winsertBundler")
 const fs = require("fs")
 
+if (require("electron-squirrel-startup")) app.quit()
+
 const APP_VERSION = "2023.02"
 
 
