@@ -3,7 +3,12 @@ const {
   createShortcut,
   createIco
 } = require("./winsertInstaller/installWinsert")
+const path = require("path")
 const permissionsEngine = require("./permissionsManager/permissionsEngine")
+
+const __ = (file) => {
+  return path.join(__dirname, file)
+}
 
 const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
@@ -20,7 +25,7 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   ipcMain.handle("getSettings", async () => {
     const questrial = fs.readFileSync(
-      "addons/assets/Questrial-Regular.ttf",
+      __("addons/assets/Questrial-Regular.ttf"),
       { encoding: "base64" }
     )
 

@@ -1,9 +1,14 @@
 const fs = require("fs")
+const path = require("path")
+
+const __ = (file) => {
+  return path.join(__dirname, file)
+}
 
 const loadAddon = (webContent, windowObject, addonName) => {
   return {
     winsideAssets: () => {
-      const rawSvg = fs.readFileSync("logo.svg", "utf8")
+      const rawSvg = fs.readFileSync(__("../logo.svg"), "utf8")
       const modifiedSvg = rawSvg
         .replace(
           // eslint-disable-next-line max-len
@@ -18,14 +23,14 @@ const loadAddon = (webContent, windowObject, addonName) => {
           /style="fill:rgb\(235,235,235\);"/,
           "class=\"winside-assets svg-style-replace-3\""
         )
-      fs.readFile("addons/assets/logoSvgStyles.css", (err, svgCss) => {
+      fs.readFile(__("../addons/assets/logoSvgStyles.css"), (err, svgCss) => {
         webContent.webContents.insertCSS(
           svgCss.toString()
         )
           .catch(err => console.log(err))
       })
       const questrial = fs.readFileSync(
-        "addons/assets/Questrial-Regular.ttf",
+        __("../addons/assets/Questrial-Regular.ttf"),
         { encoding: "base64" }
       )
       windowObject.addons.winsideAssets = {
