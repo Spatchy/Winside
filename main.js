@@ -23,7 +23,7 @@ const __ = (file) => {
 
 if (require("electron-squirrel-startup")) app.quit()
 
-const APP_VERSION = "2023.02"
+const APP_VERSION = app.getVersion()
 
 
 let userSettings = setup.check(app.getPath("userData"))

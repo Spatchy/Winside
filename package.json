@@ -1,6 +1,6 @@
 {
   "name": "winside",
-  "version": "1.0.0",
+  "version": "2023.03",
   "description": "Turn practically any web content into native-feeling sidebars for Windows.",
   "main": "main.js",
   "scripts": {
