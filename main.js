@@ -16,12 +16,12 @@ const installWinsert = require("./winsertInstaller/installWinsert")
 const uninstallWinsert = require("./winsertInstaller/uninstallWinsert")
 const winsertBundler = require("./winsertBundler/winsertBundler")
 const fs = require("fs")
+const __ = require("./utils/pathify")
 
-const __ = (file) => {
-  return path.join(__dirname, file)
+if (require("electron-squirrel-startup")) return
+if (process.argv.length > 1) {
+  if (process.argv[1] === "--squirrel-install") return
 }
-
-if (require("electron-squirrel-startup")) app.quit()
 
 const APP_VERSION = app.getVersion()
 

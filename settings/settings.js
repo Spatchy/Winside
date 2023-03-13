@@ -1,9 +1,5 @@
 const { BrowserWindow } = require("electron")
-const path = require("path")
-
-const __ = (file) => {
-  return path.join(__dirname, file)
-}
+const __ = require("../utils/pathify")
 
 const createWindow = () => {
 
@@ -13,13 +9,13 @@ const createWindow = () => {
   const win = new BrowserWindow({
     width: primaryDisplay.workAreaSize.width / 2,
     height: primaryDisplay.workAreaSize.height / 2,
-    icon: __("../logo.ico"),
+    icon: __("logo.ico"),
     webPreferences: {
-      preload: __("preload.js"),
+      preload: __("settings/preload.js"),
     }
   })
 
-  win.loadFile(__("index.html"))
+  win.loadFile(__("settings/index.html"))
     .catch((e) => console.error(e))
 
   win.on("close", (e) => {

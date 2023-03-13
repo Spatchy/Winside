@@ -29,6 +29,7 @@
     "eslint": "^8.24.0"
   },
   "dependencies": {
+    "electron-log": "^5.0.0-beta.16",
     "electron-squirrel-startup": "^1.0.0",
     "jszip": "^3.10.1",
     "png-to-ico": "^2.1.8",

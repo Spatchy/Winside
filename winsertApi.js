@@ -3,12 +3,8 @@ const {
   createShortcut,
   createIco
 } = require("./winsertInstaller/installWinsert")
-const path = require("path")
 const permissionsEngine = require("./permissionsManager/permissionsEngine")
-
-const __ = (file) => {
-  return path.join(__dirname, file)
-}
+const __ = require("./utils/pathify")
 
 const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
