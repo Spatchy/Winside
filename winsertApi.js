@@ -4,6 +4,7 @@ const {
   createIco
 } = require("./winsertInstaller/installWinsert")
 const permissionsEngine = require("./permissionsManager/permissionsEngine")
+const __ = require("./utils/pathify")
 
 const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
@@ -20,7 +21,7 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
   ipcMain.handle("getSettings", async () => {
     const questrial = fs.readFileSync(
-      "addons/assets/Questrial-Regular.ttf",
+      __("addons/assets/Questrial-Regular.ttf"),
       { encoding: "base64" }
     )
 

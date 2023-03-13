@@ -2,11 +2,7 @@ const fs = require("fs")
 const JSZip = require("jszip")
 const { v4: uuidv4 } = require("uuid")
 const pngToIco = require("png-to-ico")
-const path = require("path")
-
-const __ = (file) => {
-  return path.join(__dirname, file)
-}
+const __ = require("../utils/pathify")
 
 const extractWinsert = async (source, dest) => {
   const zip = new JSZip()
@@ -36,7 +32,7 @@ const createIco = async (rawIconPath) => {
 }
 
 const createShortcut = (winsertName, winsertId, outPath, icoPath) => {
-  const icoPathToUse = icoPath ?? __("../logo.ico")
+  const icoPathToUse = icoPath ?? __("logo.ico")
   fs.writeFileSync(`${outPath}/${winsertName}.url`, [
     "[InternetShortcut]",
     `URL=winside://${winsertId}/`,

@@ -16,8 +16,14 @@ const installWinsert = require("./winsertInstaller/installWinsert")
 const uninstallWinsert = require("./winsertInstaller/uninstallWinsert")
 const winsertBundler = require("./winsertBundler/winsertBundler")
 const fs = require("fs")
+const __ = require("./utils/pathify")
 
-const APP_VERSION = "2023.02"
+if (require("electron-squirrel-startup")) return
+if (process.argv.length > 1) {
+  if (process.argv[1] === "--squirrel-install") return
+}
+
+const APP_VERSION = app.getVersion()
 
 
 let userSettings = setup.check(app.getPath("userData"))
@@ -157,7 +163,7 @@ if (!instanceLock) {
       sidebar.createWindow(oobeWinsertId, userSettings, manifest)
     }
 
-    const tray = new Tray("logo.ico")
+    const tray = new Tray(__("logo.ico"))
     const menu = Menu.buildFromTemplate([
       { role: "quit" }
     ])

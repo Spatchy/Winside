@@ -4,12 +4,8 @@ const {
   globalShortcut,
   ipcMain
 } = require("electron")
-const path = require("path")
+const __ = require("../utils/pathify")
 const winsertEngine = require("./winsertEngine")
-
-const __ = (file) => {
-  return path.join(__dirname, file)
-}
 
 const relativeToActualWidth = (rel, screenWidth) => {
   return Math.floor((screenWidth / 12) * rel)
@@ -97,20 +93,20 @@ const createWindow = (
 
   const win = new BrowserView({
     webPreferences: {
-      preload: __("preload.js")
+      preload: __("sidebar/preload.js")
     }
   })
 
   const webContent = view ?? new BrowserView({
     webPreferences: {
-      preload: __("winsertPreload.js"),
+      preload: __("sidebar/winsertPreload.js"),
       devTools: userSettings.openDevToolsOnLaunch
     }
   })
 
   container.addBrowserView(win)
 
-  win.webContents.loadFile(__("index.html"))
+  win.webContents.loadFile(__("sidebar/index.html"))
     .then(() => {
 
       container.addBrowserView(webContent)

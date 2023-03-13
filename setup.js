@@ -1,5 +1,6 @@
 const fs = require("fs")
 const { v4: uuidv4 } = require("uuid")
+const __ = require("./utils/pathify")
 
 const defaults = {
   showOOBE: false,
@@ -25,7 +26,7 @@ const init = (userData) => {
   )
 
   fs.cpSync(
-    "./winserts/OOBE",
+    __("winserts/OOBE"),
     `${userData}/winserts/${oobeWinsertId}`,
     { recursive: true }
   )

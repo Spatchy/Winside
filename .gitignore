@@ -105,3 +105,6 @@ dist
 
 # Visual Studio Code
 .vscode
+
+# Electron Forge
+/out
