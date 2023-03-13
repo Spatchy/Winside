@@ -14,6 +14,7 @@ const createWindow = () => {
       preload: __("settings/preload.js"),
     }
   })
+  win.removeMenu()
 
   win.loadFile(__("settings/index.html"))
     .catch((e) => console.error(e))
