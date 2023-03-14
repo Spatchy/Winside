@@ -64,12 +64,12 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
 
     const rawIconPath = `${userData}/winserts/${winsertId}/icon`
     let icoPath
-    if (!fs.existsSync(`${rawIconPath}.ico`)) {
-      if (fs.existsSync(`${rawIconPath}.png`)) {
-        await createIco(rawIconPath)
-        icoPath = `${rawIconPath}.ico`
-      }
-    }
+    if (fs.existsSync(`${rawIconPath}.ico`)) {
+      icoPath = `${rawIconPath}.ico`
+    } else if (fs.existsSync(`${rawIconPath}.png`)) {
+      await createIco(rawIconPath)
+      icoPath = `${rawIconPath}.ico`
+    } // else icoPath remains undefined
     createShortcut(shortcutName, winsertId, splitPath.join("\\"), icoPath)
   })
 
