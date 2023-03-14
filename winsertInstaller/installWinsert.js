@@ -60,6 +60,7 @@ const installWinsert = async (
   const rawIconPath = `${userData}/winserts/${winsertId}/icon`
   if (fs.existsSync(`${rawIconPath}.png`)) {
     createIco(rawIconPath)
+    icoPath = `${rawIconPath}.ico`
   }
 
   if (userSettings.createDesktopShortcuts) {
