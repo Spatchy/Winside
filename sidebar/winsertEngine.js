@@ -60,6 +60,22 @@ const loadWinsert = (webContent, winsertId, manifest, userSettings) => {
           
         })
       })
+
+      await webContent.webContents.executeJavaScript(
+        `const notifyCallback = (title, opt) => {
+          window.WinsideAPI.sendNotification(
+            window.Winside.vars.winsertId,
+            title,
+            opt
+          )
+        }
+        
+        window.Notification = new Proxy(Notification, {
+          construct(_target, args) {
+            notifyCallback(...args)
+          }
+        })`
+      )
     })
     .catch(err => console.log(err))
 }
