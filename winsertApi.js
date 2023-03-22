@@ -232,8 +232,14 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     if (!permissionsEngine.checkPermission(winsertId, "sendNotifications")) {
       return new Error("Insufficient Permissions")
     }
+    let bodyToUse
     const icon = `${userData}/winserts/${winsertId}/icon.png`
-    apiFunctionsMap.sendNotification(title, body, icon)
+    if (typeof body === "string") {
+      bodyToUse = body
+    } else {
+      bodyToUse = body.body
+    }
+    apiFunctionsMap.sendNotification(title, bodyToUse, icon)
   })
 
   ipcMain.handle("keepOpenInBackground", async (_event, winsertId) => {
