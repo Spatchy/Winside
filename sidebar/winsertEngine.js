@@ -8,10 +8,12 @@ const loadWinsert = (webContent, winsertId, manifest, userSettings) => {
   const loadOptions = {}
   if (manifest.userAgent) {
     loadOptions.userAgent = manifest.userAgent
+    app.userAgentFallback = manifest.userAgent
   }
   if (userSettings.showDeveloperOptions && userSettings.customUserAgent) {
     if (!manifest.userAgent || userSettings.overrideWinsertAgents) {
       loadOptions.userAgent = userSettings.customUserAgent
+      app.userAgentFallback = userSettings.customUserAgent
     }
   }
   webContent.webContents.loadURL(manifest.mainURL, loadOptions)
