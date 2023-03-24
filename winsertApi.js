@@ -200,6 +200,9 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     winsertId,
     permissionName
   ) => {
+    if (permissionsEngine.checkPermission(winsertId, permissionName)) {
+      return true
+    }
     const displayName = apiFunctionsMap.getWinsertDisplayName(winsertId)
     if (displayName === undefined) return new Error("Invalid Winsert ID")
     if (apiFunctionsMap.showMessageBox({
