@@ -142,6 +142,26 @@ div.button-switch-side-container {
   font-size: 28pt;
 }
 
+#colorPicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 6em;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: var(--accent-color);
+  color: white;
+  border-width: 0;
+  border-radius: 100rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+div.clr-field > button {
+  display: none;
+}
+
 div.settings-sections {
   display: flex;
   flex-direction: column;

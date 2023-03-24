@@ -1,4 +1,3 @@
-
 const menuSelector = (selection) => {
   Array.from(document.getElementsByClassName("settings-page"))
     .forEach(page => {
@@ -196,6 +195,13 @@ document.addEventListener("DOMContentLoaded", () => {
     rootStyle.setProperty("--accent-color", settings.accentColor)
     rootStyle.setProperty("--accent-color-alpha", `${settings.accentColor}aa`)
 
+    window.Coloris({
+      alpha: false,
+      wrap: true,
+      el: "#colorPicker",
+      theme: "large"
+    })
+
     const changeSetting = (setting, value) => {
       window.WinsideSettings.changeSetting(setting, value)
       settings[setting] = value
@@ -244,8 +250,6 @@ document.addEventListener("DOMContentLoaded", () => {
         stateMap.setSidebarRight(ctrl)
         stateMap.setSidebarLeft(ctrl.previousElementSibling)
       },
-      
-      colorPicker: (_ctrl) => {}, // TODO
 
       allowColorOverride: (ctrl) => {
         changeSetting("allowAccentOverride", ctrl.checked)
@@ -293,6 +297,12 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           ctrl.classList.add("ghost")
         }
+      },
+
+      colorPicker: (ctrl) => {
+        ctrl.value = settings.accentColor
+        // document.querySelector("#color-field")
+        //   .dispatchEvent(new Event("input", { bubbles: true }))
       },
 
       allowColorOverride: (ctrl) => {
@@ -353,6 +363,15 @@ document.addEventListener("DOMContentLoaded", () => {
       customAgentInput: (ctrl) => {
         ctrl.addEventListener("change", () => {
           window.WinsideSettings.changeSetting("customUserAgent", ctrl.value)
+        })
+      },
+
+      colorPicker: (ctrl) => {
+        ctrl.addEventListener("change", () => {
+          changeSetting("accentColor", ctrl.value)
+          rootStyle.setProperty("--accent-color", settings.accentColor)
+          rootStyle
+            .setProperty("--accent-color-alpha", `${settings.accentColor}aa`)
         })
       }
     }

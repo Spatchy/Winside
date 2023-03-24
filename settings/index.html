@@ -5,6 +5,8 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; style-src 'self' 'unsafe-inline'; default-src 'self'; script-src 'self'; font-src 'self' data:;">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="coloris/coloris.min.css"/>
+    <script src="coloris/coloris.min.js"></script>
     <script src="renderer.js"></script>
     <script src="../addons/fontAwesome/fontawesome.min.js"></script>
     <script src="../addons/fontAwesome/solid.min.js"></script>
@@ -57,7 +59,7 @@
                 <button control id="setSidebarRight" class="icon-button"><span class="icon-large"><i class="fa-solid fa-arrow-right"></i></span>Right</button>
               </div>
             </div>
-            <div>Accent Color <button control id="colorPicker"><i class="fa-solid fa-eye-dropper"></i></button></div>
+            <div>Accent Color <input control type="text" id="colorPicker"></div>
             <div>
               <input control type="checkbox" id="allowColorOverride" />
               <span>Allow Winserts to override accent color on sidebar</span>
