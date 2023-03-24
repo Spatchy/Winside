@@ -48,11 +48,28 @@ const generateWinsertListing = (winsertId, manifestData, permissionsData) => {
   })
 
   if (permissionsData) {
-    const grantedPermisionsArr = Object.keys(permissionsData).filter((perm) => {
+    let grantedPermisionsArr = Object.keys(permissionsData).filter((perm) => {
       return permissionsData[perm]
     })
     const permissionsHeader = node.querySelector(".permissions-header")
     const permissionsTable = node.querySelector(".permissions-table")
+
+    const formatPermissionsString = () => {
+      const numOfPermissions = grantedPermisionsArr.length
+      if (numOfPermissions === 0) {
+        permissionsHeader.classList.add("is-hidden")
+      } else {
+        permissionsHeader.classList.remove("is-hidden")
+        const singleOrMultiple = numOfPermissions === 1
+          ? "\xa0permission has"
+          : "\xa0permissions have"
+        permissionsHeader.querySelector(".number-of-perms")
+          .innerText = numOfPermissions
+        permissionsHeader.querySelector(".number-of-perms-message")
+          .innerText = `${singleOrMultiple} been granted`
+      }
+    }
+
     grantedPermisionsArr.forEach((permissionName) => {
       const row = document.getElementById("permissionRowTemplate")
         .cloneNode(true)
@@ -67,22 +84,16 @@ const generateWinsertListing = (winsertId, manifestData, permissionsData) => {
         ).then((result) => {
           if (result === true) {
             row.remove()
-            node.querySelector(".number-of-perms").innerText -= 1
+            grantedPermisionsArr = grantedPermisionsArr
+              .filter((perm) => perm !== permissionName)
+            formatPermissionsString()
           }
         })
       })
       permissionsTable.appendChild(row)
     })
 
-    const numOfPermissions = grantedPermisionsArr.length
-    const singleOrMultiple = numOfPermissions === 1
-      ? "\xa0permission has"
-      : "\xa0permissions have"
-    permissionsHeader.querySelector(".number-of-perms")
-      .innerText = numOfPermissions
-    permissionsHeader.querySelector(".number-of-perms-message")
-      .innerText = `${singleOrMultiple} been granted`
-
+    formatPermissionsString()
     permissionsHeader.addEventListener("click", async () => {
       if (!permissionsHeader.classList.contains("expanded")) {
         permissionsHeader.classList.add("expanded")
