@@ -21,6 +21,21 @@ const __ = require("./utils/pathify")
 if (require("electron-squirrel-startup")) return
 if (process.argv.length > 1) {
   if (process.argv[1] === "--squirrel-install") return
+
+  if (process.argv[1] === "--squirrel-firstrun") {
+    const appFolder = path.dirname(process.execPath)
+    const updateExe = path.resolve(appFolder, "..", "Update.exe")
+    const exeName = path.basename(process.execPath)
+
+    app.setLoginItemSettings({
+      openAtLogin: true,
+      path: updateExe,
+      args: [
+        "--processStart", `"${exeName}"`,
+        "--process-start-args", "\"--hidden\""
+      ]
+    })
+  }
 }
 
 const APP_VERSION = app.getVersion()
