@@ -227,6 +227,10 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     return apiFunctionsMap.getAppVersion()
   })
 
+  ipcMain.handle("checkForUpdates", async () => {
+    return apiFunctionsMap.checkForUpdates()
+  })
+
   ipcMain.on("openLinkInBrowser", async (_event, link) => {
     apiFunctionsMap.openExternal(link)
   })
@@ -242,7 +246,7 @@ const openIpcChannels = (app, ipcMain, apiFunctionsMap) => {
     } else {
       bodyToUse = body.body
     }
-    apiFunctionsMap.sendNotification(title, bodyToUse, icon)
+    apiFunctionsMap.sendNotification(title, bodyToUse, icon, winsertId)
   })
 
   ipcMain.handle("keepOpenInBackground", async (_event, winsertId) => {

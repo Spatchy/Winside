@@ -52,5 +52,7 @@ contextBridge.exposeInMainWorld("WinsideSettings", {
     )
   },
 
-  bundleWinsert: () => ipcRenderer.send("bundleWinsert")
+  bundleWinsert: () => ipcRenderer.send("bundleWinsert"),
+
+  checkForUpdates: () => ipcRenderer.invoke("checkForUpdates")
 })

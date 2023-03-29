@@ -24,6 +24,15 @@ section {
   border-radius: 9px;
 }
 
+section#updatePanel {
+  background-color: var(--accent-color-alpha);
+  color: white;
+}
+
+section#updatePanel h2 .svg-inline--fa {
+  color: white;
+}
+
 h2 {
   display: flex;
   align-items: center;
