@@ -1,4 +1,5 @@
 const semver = require("semver")
+const fetch = require("electron-fetch").default
 
 const getLatestVersionNumber = async () => {
   const url = "https://api.github.com/repos/Spatchy/Winside/releases"

@@ -7,6 +7,7 @@ const {
   Menu,
   Notification
 } = require("electron")
+const fs = require("fs")
 const path = require("path")
 const sidebar = require("./sidebar/sidebar")
 const settings = require("./settings/settings")
@@ -15,7 +16,7 @@ const winsertApi = require("./winsertApi")
 const installWinsert = require("./winsertInstaller/installWinsert")
 const uninstallWinsert = require("./winsertInstaller/uninstallWinsert")
 const winsertBundler = require("./winsertBundler/winsertBundler")
-const fs = require("fs")
+const updateManager = require("./updateManager/updateManager")
 const __ = require("./utils/pathify")
 
 if (require("electron-squirrel-startup")) return
@@ -73,12 +74,16 @@ const apiFunctionsMap = {
     )
   },
 
-  sendNotification: (title, body, iconPath) => {
+  sendNotification: (title, body, iconPath, handlerUri) => {
     let icon = iconPath
     if (!fs.existsSync(iconPath)) {
       icon = "./logo.ico"
     }
-    new Notification({ title: title, body: body, icon: icon }).show()
+    const notif = new Notification({ title: title, body: body, icon: icon })
+    notif.addListener("click", () => {
+      shell.openExternal(`winside://${handlerUri}/`)
+    })
+    notif.show()
   },
 
   kill: (winsertId) => {
@@ -104,7 +109,9 @@ const apiFunctionsMap = {
     )[winsertId]
   },
 
+  
   getSettings: () => userSettings,
+  checkForUpdates: () => updateManager.checkForUpdates(APP_VERSION),
   openExternal: shell.openExternal,
   openDialog: dialog.showOpenDialog,
   saveDialog: dialog.showSaveDialog,
@@ -113,6 +120,23 @@ const apiFunctionsMap = {
   getBackgroundWinsertsList: () => Object.keys(backgroundWinserts),
   getAppVersion: () => APP_VERSION
 }
+
+const handleUpdateCheckResult = (isUpdateAvailable) => {
+  if (isUpdateAvailable) {
+    apiFunctionsMap.sendNotification(
+      "Update Winside",
+      "An update for Winside is available",
+      "./logo.ico"
+    )
+  }
+}
+
+updateManager.checkForUpdates(APP_VERSION)
+  .then(handleUpdateCheckResult)
+setInterval(() => {
+  updateManager.checkForUpdates(APP_VERSION)
+    .then(handleUpdateCheckResult)
+}, 21600000) // 6 hours
 
 winsertApi.openIpcChannels(app, ipcMain, apiFunctionsMap)
 

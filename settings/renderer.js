@@ -222,6 +222,12 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     
       // General:
+      downloadUpdate: (_ctrl) => {
+        window.WinsideSettings.openLinkInBrowser(
+          "https://github.com/Spatchy/Winside/releases/latest"
+        )
+      },
+
       dataFolder: (_ctrl) => {
         window.WinsideSettings.openDataFolder()
       },
@@ -420,6 +426,13 @@ document.addEventListener("DOMContentLoaded", () => {
           .innerText = "There's nothing currently running in the background"
       }
     })
+
+    window.WinsideSettings.checkForUpdates()
+      .then((isUpdateAvailable) => {
+        if (isUpdateAvailable) {
+          document.querySelector("#updatePanel").classList.remove("is-hidden")
+        }
+      })
 
   })
 })
