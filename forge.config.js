@@ -2,7 +2,9 @@
 const path = require("path")
 
 module.exports = {
-  packagerConfig: {},
+  packagerConfig: {
+    icon: path.join(__dirname, "logo.ico")
+  },
   rebuildConfig: {},
   makers: [
     {
