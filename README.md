@@ -4,18 +4,21 @@
 ___
 
 ## 📣 Announcement
-### Release [2023.02](https://github.com/Spatchy/Winside/releases) is out now! 🎉🎉🎉
-The second developer preview of Winside is out now! **So much has improved since the first release!**
+### [The first public release](https://github.com/Spatchy/Winside/releases) of Winside is now available! 🎉🎉🎉
+This release includes an exe installer that anyone running Windows 10 or 11 can use. [⭳ Download the installer and get started!](https://github.com/Spatchy/Winside/releases/download/2023.3.0/winside-2023.3.0.Setup.exe)
 
-See the [wiki](https://github.com/Spatchy/Winside/wiki) for the lateset changes and new Winsert developer guide!
+You can expect a flood of new Winserts to hit the [Winserts repository](https://github.com/Spatchy/Winserts) in the coming days and weeks as more people get their hands on Winside and begin to create sidebars for themselves.
 
-Next up? 2023.03 should be the first public release, see you in March 😉
+If you're interested in creating Winserts or want to know more about Winside's more technical parts, be sure to take a look at [the wiki](https://github.com/Spatchy/Winside/wiki) for the lateset changes and Winsert developer guide!
 
 ___
 
 ### What is Winside
-Winside is an app for Windows, powered by Electron, that allows practically any web content to be turned into a useful native-feeling sidebar.
+Winside is an app for Windows that allows practically any web content to be turned into a useful native-feeling sidebar.
 Winside uses applets called [Winserts](https://github.com/Spatchy/Winserts) to load pages and modify them with custom JavaScript and CSS so they're perfect for viewing and using in a sidebar formfactor. Winside also provides a useful API to unlock more power from your favourite online services.
 
 ### What can it do?
-Winside is curently in developer preview and isn't quite ready for general use just yet. Right now, it can open a sidebar from a url shortcut, injust custom scripts and stylesheets and there's a settings menu which features a growing list of customisation options and useful tools. From its first general public release, Winside will have a useful and well-documented API and a library of useful Winserts in the official repository to allow anyone to view content at a glance and use useful tools right from a powerful pop-out sidebar.
+Winside is now available to anyone with Windows 10 or 11! Once a Winsert is installed, you can open its sidebar from a shortcut and use it whenever you like, no switching browser windows required! Winside's ability to inject custom scripts and stylesheets into any website mean Winside's sidebars have extra powers compared to their regular browser-based versions, all handled through Winside's permission system.
+
+If you have any basic web development experience (or even if you just want to learn!), creating your own Winsert is relatively easy. Winside has a useful and well-documented API and a growing collection of development tools so you can create your ideal sidebar! Be sure to take a look at [the wiki](https://github.com/Spatchy/Winside/wiki) for more information and to see the developer guide!
+
